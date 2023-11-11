@@ -7,7 +7,7 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
-    
+
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -15,12 +15,27 @@ kotlin {
             }
         }
     }
-    
+    js {
+        browser {
+            testTask {
+                useKarma {
+                    useSafari()
+                }
+            }
+        }
+        binaries.executable()
+    }
+
     jvm()
-    
+
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.junit)
             // put your Multiplatform dependencies here
+        }
+        jsTest.dependencies {
+            //TODO
+            implementation(kotlin("test-js"))
         }
     }
 }

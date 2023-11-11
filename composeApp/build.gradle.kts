@@ -15,9 +15,13 @@ kotlin {
             }
         }
     }
-    
+
+    js {
+        browser()
+        binaries.executable()
+    }
     jvm("desktop")
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -47,6 +51,11 @@ kotlin {
             implementation(compose.material)
             @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
+        }
+        jsMain.dependencies {
+            implementation(compose.html.core)
+            implementation(compose.runtime)
+            implementation(npm("crypto-js", "3.1.9-1"))
         }
     }
 }
@@ -90,7 +99,9 @@ android {
         debugImplementation(libs.compose.ui.tooling)
     }
 }
-
+compose.experimental {
+    web.application {}
+}
 compose.desktop {
     application {
         mainClass = "MainKt"
