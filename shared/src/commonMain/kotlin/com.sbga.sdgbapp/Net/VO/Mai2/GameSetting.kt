@@ -1,7 +1,7 @@
 package com.sbga.sdgbapp.VO.Mai2
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class GameSetting(

@@ -1,6 +1,5 @@
-package com.sbga.sdgbapp
+package com.sbga.sdgbapp.Utility
 
-import com.sbga.sdgbapp.Utility.CipherAES
 import kotlin.experimental.inv
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -9,9 +8,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 class NetHttpClient {
 
     constructor()
-    constructor(url: String) {
-
-    }
+    constructor(url: String)
 
     private fun checkServerParameter(inData: ByteArray, compare: ByteArray): Boolean {
         inData[43] = 61

@@ -1,7 +1,7 @@
 package com.sbga.sdgbapp.VO.Mai2
 
 
-import com.sbga.sdgbapp.DB.MusicDifficultyID
+import com.sbga.sdgbapp.Manager.MusicDifficultyID
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

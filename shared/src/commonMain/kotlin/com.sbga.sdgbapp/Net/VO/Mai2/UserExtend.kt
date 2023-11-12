@@ -1,6 +1,8 @@
 package com.sbga.sdgbapp.VO.Mai2
 
-import com.sbga.sdgbapp.DB.*
+import com.sbga.sdgbapp.DB.SortMusicID
+import com.sbga.sdgbapp.DB.SortTabID
+import com.sbga.sdgbapp.Manager.PlaystatusTabID
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

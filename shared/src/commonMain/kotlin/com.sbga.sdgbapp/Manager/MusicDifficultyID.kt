@@ -1,4 +1,4 @@
-package com.sbga.sdgbapp.DB
+package com.sbga.sdgbapp.Manager
 
 enum class MusicDifficultyID(val value: Int) {
     Basic(0),

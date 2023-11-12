@@ -1,4 +1,4 @@
-package com.sbga.sdgbapp
+package com.sbga.sdgbapp.Utility
 
 import io.github.aakira.napier.Napier
 

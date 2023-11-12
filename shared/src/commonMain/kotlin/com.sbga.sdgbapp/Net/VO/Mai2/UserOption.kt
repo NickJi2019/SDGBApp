@@ -1,9 +1,7 @@
 package com.sbga.sdgbapp.VO.Mai2
 
-import com.sbga.sdgbapp.Manager.*
 import com.sbga.sdgbapp.DB.*
 import kotlinx.serialization.SerialName
-
 import kotlinx.serialization.Serializable
 
 @Serializable

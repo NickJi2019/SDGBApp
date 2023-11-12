@@ -1,4 +1,4 @@
-package com.sbga.sdgbapp.DB
+package com.sbga.sdgbapp.Manager
 
 enum class PlayComboflagID(val value: Int) {
     None(0),

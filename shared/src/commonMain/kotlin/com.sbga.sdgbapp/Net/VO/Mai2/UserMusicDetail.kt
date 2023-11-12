@@ -1,9 +1,8 @@
 package com.sbga.sdgbapp.VO.Mai2
 
+import com.sbga.sdgbapp.Manager.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-
-import com.sbga.sdgbapp.DB.*
 
 @Serializable
 data class UserMusicDetail(

@@ -1,4 +1,4 @@
-package com.sbga.sdgbapp.DB
+package com.sbga.sdgbapp.Manager
 
 enum class MusicClearrankID(val value: Int) {
     Rank_D(0),
