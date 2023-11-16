@@ -34,8 +34,12 @@ kotlin {
             implementation(libs.junit)
             implementation("io.github.aakira:napier:2.6.1")
             implementation("io.ktor:ktor-client-core:2.3.5")
+            implementation("io.ktor:ktor-client-encoding:2.3.5")
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+//            implementation("io.ktor:ktor-client-cio:$2.3.5")
+//            implementation(project(":compression"))
+//            implementation(project(":e2e"))
             // put your Multiplatform dependencies here
         }
         jsTest.dependencies {

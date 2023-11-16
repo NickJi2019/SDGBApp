@@ -7,8 +7,8 @@ import com.sbga.sdgbapp.VO.VOSerializer
 class NetQuery<T0 : VOSerializer, T1 : VOSerializer> {
     val api: String
     val UserId: ULong
-    val request: T0?
-    var response: T1?
+    var request: Any?
+    var response: Any?
 
     constructor(api: String, userId: ULong, requestVO: T0? = null) {
         this.api = api + "MaimaiChn"
@@ -21,10 +21,14 @@ class NetQuery<T0 : VOSerializer, T1 : VOSerializer> {
         return toJsonString<T>(this.request as T)
     }
 
+
+    inline fun <reified T : VOSerializer> getResponse(): T {
+        return response as T
+    }
     inline fun <reified T : VOSerializer> setResponse(str: String) {
         if (str.isEmpty()) {
             throw Exception("json string is empty")
         }
-        this.response = str.toClass<T>() as T1
+        this.response = str.toClass<T>()
     }
 }

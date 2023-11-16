@@ -1,11 +1,14 @@
-import com.sbga.sdgbapp.Utility.CipherAES
-import com.sbga.sdgbapp.Utility.MD5
+import com.sbga.sdgbapp.Utility.*
 import com.sbga.sdgbapp.VO.VOSerializer
 import io.ktor.util.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
+import platform.zlib.*
+import platform.Foundation.*
+import kotlinx.coroutines.*
+import kotlinx.cinterop.*
 
 class Test {
     @Test
@@ -28,4 +31,20 @@ class Test {
     fun md() {
         println(MD5.md5("hello").encodeBase64())
     }
+
+    @OptIn(ExperimentalForeignApi::class)
+    @Test
+    fun zstream() {
+        sizeOf<z_stream>()
+
+    }
+
+    @Test
+    fun compress() {
+        val b = "hello".encodeToByteArray()
+        val a = Compressor.deflate(CipherAES.encrypt(b))
+        val c = Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b)))
+        val d = CipherAES.decrypt(Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b))))
+    }
+
 }

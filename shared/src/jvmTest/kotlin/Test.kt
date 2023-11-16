@@ -1,8 +1,6 @@
-import com.sbga.sdgbapp.Net.NetPacketUtil
 import com.sbga.sdgbapp.Net.Packet.Packet
 import com.sbga.sdgbapp.Net.VO.NetQuery
-import com.sbga.sdgbapp.Utility.CipherAES
-import com.sbga.sdgbapp.Utility.MD5
+import com.sbga.sdgbapp.Utility.*
 import com.sbga.sdgbapp.VO.Mai2.UserLoginRequestVO
 import com.sbga.sdgbapp.VO.Mai2.UserLoginResponseVO
 import com.sbga.sdgbapp.VO.VOSerializer
@@ -42,7 +40,24 @@ class Test {
         ) : VOSerializer()
         println(Json.encodeToString(a(name = "bonjour")))
 //        println(NetQuery<GameChargeRequestVO,GameChargeResponseVO>("api",1u,GameChargeRequestVO(true)).getRequest())
-
+        val query = NetQuery<UserLoginRequestVO, UserLoginRequestVO>(
+            "UserLoginApi", 11029236u, UserLoginRequestVO(
+                11029236u, "", 1, 1641, "A63E01D8972", (System.currentTimeMillis() / 1000), false, 0
+            )
+        )
+        query.setResponse<UserLoginRequestVO>(
+            """{"userId":11029236,"accessCode":"","regionId":1,"placeId":1641,"clientId":"A63E01D8972","dateTime":1700059321,"isContinue":false,"genericFlag":0}"""
+        )
+        (query.response as UserLoginRequestVO).apply {
+            println(userId)
+            println(accessCode)
+            println(regionId)
+            println(placeId)
+            println(clientId)
+            println(dateTime)
+            println(isContinue)
+            println(genericFlag)
+        }
     }
 
     @Test
@@ -51,24 +66,24 @@ class Test {
     }
 
     @Test
+    fun compress() {
+        val b = "hello".encodeToByteArray()
+        val a = Compressor.deflate(CipherAES.encrypt(b))
+        val c = Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b)))
+        val d = CipherAES.decrypt(Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b))))
+    }
+
+    @Test
     fun http() {
         runBlocking {
-            val query = NetQuery<UserLoginRequestVO, UserLoginResponseVO>(
-                "UserLoginApi", 11029236u, UserLoginRequestVO(
-                    11029236u, "", 1, 1641, "A63E01D8972", (System.currentTimeMillis() / 1000), false, 0
+            Packet().create(
+                NetQuery(
+                    "UserLoginApi", 11029236u,
+                    UserLoginRequestVO(
+                        11029236u, "", 1, 1641, "A63E01D8972", (System.currentTimeMillis() / 1000), false, 0
+                    )
                 )
-            )
-            Packet().apply {
-                create<UserLoginRequestVO, UserLoginResponseVO>(query)
-                println((this.query.response!! as UserLoginResponseVO).loginId)
-            }
-
+            ).query.getResponse<UserLoginResponseVO>()
         }
-        println(Packet.obfuscator("UserLoginApi"))
-        println(
-            NetPacketUtil.getUserAgent(
-                NetQuery<UserLoginRequestVO, UserLoginResponseVO>("UserLoginApi", 11029236u, null)
-            )
-        )
     }
 }
