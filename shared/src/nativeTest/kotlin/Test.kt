@@ -35,16 +35,16 @@ class Test {
     @OptIn(ExperimentalForeignApi::class)
     @Test
     fun zstream() {
-        sizeOf<z_stream>()
+        println(sizeOf<z_stream>())
 
     }
 
     @Test
     fun compress() {
         val b = "hello".encodeToByteArray()
-        val a = Compressor.deflate(CipherAES.encrypt(b))
-        val c = Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b)))
-        val d = CipherAES.decrypt(Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b))))
+        val a = Compressor.deflate(CipherAES.encrypt(b)).forEach { print(it.toInt()) }
+//        val c = Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b)))
+//        val d = CipherAES.decrypt(Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b))))
     }
 
 }

@@ -69,6 +69,11 @@ class Test {
     fun compress() {
         val b = "hello".encodeToByteArray()
         val a = Compressor.deflate(CipherAES.encrypt(b))
+        println(b.joinToString(" "))
+        println(CipherAES.encrypt(b).joinToString(" "))
+        println(CipherAES.decrypt(CipherAES.encrypt(b)).joinToString(" "))
+        println(Compressor.deflate(b).joinToString(" "))
+        println(Compressor.inflate(Compressor.deflate(b)).joinToString(" "))
         val c = Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b)))
         val d = CipherAES.decrypt(Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b))))
     }
