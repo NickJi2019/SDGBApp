@@ -1,23 +1,35 @@
-# SDGBApp
+# SDGBApp 
+## 一个统合的自定义maimai转发服务器
+[English](./README-en.md)
 
-A unified maimai custom forwarding server
+### 开发指南
+对于在中国大陆的开发者，请首先编辑/settings.gradle.kts文件，将
+`mavenCentral()`
+`gradlePluginPortal()`
+`google()`<br>
+替换为<br>
+`maven("https://maven.aliyun.com/repository/public/")`
+`maven("https://maven.aliyun.com/repository/gradle-plugin/")`
+`maven("https://maven.aliyun.com/repository/google/")`<br>
+以启用阿里云镜像并加快构建速度。
 
-This is a Kotlin Multiplatform project targeting Android, iOS, Desktop, Server.
+这是一个针对 安卓、iOS、桌面、服务器和浏览器的 Kotlin 多平台项目。
 
-* `/server` is for the Ktor server application.
+* `/shared` 用于将在项目中的所有目标之间共享的代码。
+  最重要的子文件夹是“commonMain”。
+  如果愿意，您可以将代码添加到
+  平台特定的文件夹也在这里。
 
-* `/shared` is for the code that will be shared between all targets in the project.
-  The most important subfolder is `commonMain`. If preferred, you can add code to the
-  platform-specific folders here too.
+* `/server` 用于 Ktor 服务器应用程序。
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+* `/composeApp` 主要用于存放UI代码，用于在您的 Compose 多平台应用程序之间共享的代码。
+  它包含几个子文件夹：
+  - `commonMain` 用于所有目标通用的代码。
+  - 其他文件夹用于存放 Kotlin 代码，这些代码将仅针对文件夹名称中指定的平台进行编译。
+    例如，如果您想将 Apple 的 CoreCrypto 用于 Kotlin 应用程序的 iOS 部分，
+    `iosMain` 将是此类调用的正确文件夹。
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+* `/iosApp` 包含 iOS 应用程序。 即使您与 Compose Multiplatform 共享 UI，
+  您的 iOS 应用程序需要此入口点。 这也是您应该为项目添加 SwiftUI 代码的地方。
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+了解有关 [Kotlin 多平台](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html) 的更多信息...
