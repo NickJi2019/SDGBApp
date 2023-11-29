@@ -22,6 +22,7 @@ class Packet {
             HttpMethod.Post
         )
         query.setResponse<T1>(CipherAES.decrypt(response).decodeToString())
+        TODO()
         return this
     }
 
