@@ -1,0 +1,23 @@
+PODS:
+  - DataCompression (3.8.0)
+  - shared (1.0):
+    - DataCompression
+
+DEPENDENCIES:
+  - shared (from `../shared`)
+
+SPEC REPOS:
+  trunk:
+    - DataCompression
+
+EXTERNAL SOURCES:
+  shared:
+    :path: "../shared"
+
+SPEC CHECKSUMS:
+  DataCompression: 630f9e7db6360b4d8929fb72fbd23689ca43bc16
+  shared: 162dd3eb733bbb0431506574a45ceb9a6b0a63ee
+
+PODFILE CHECKSUM: c783745d7c24ca4fa7218f76886128cd9e11cf66
+
+COCOAPODS: 1.14.3
