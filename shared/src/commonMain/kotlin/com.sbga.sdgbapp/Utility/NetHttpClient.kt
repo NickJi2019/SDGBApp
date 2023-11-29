@@ -7,10 +7,6 @@ import io.ktor.client.statement.*
 import io.ktor.client.plugins.*
 import io.ktor.content.*
 import io.ktor.http.*
-import io.ktor.util.*
-import io.ktor.client.plugins.compression.*
-
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 
 class NetHttpClient {
@@ -22,8 +18,8 @@ class NetHttpClient {
     constructor(url: String) {
         this.url = url
         httpClient = HttpClient {
-            install(ContentEncoding) {
-                this.deflate(1.0f)
+            install(HttpTimeout) {
+                requestTimeoutMillis = timeOutInMSec.toLong()
             }
         }
     }
@@ -41,14 +37,14 @@ class NetHttpClient {
                 header("Content-Encoding", "deflate")
                 header("Expect", "100-continue")
                 header("Accept", "")
-                ByteArrayContent(data, ContentType.Application.Json)
+                ByteArrayContent(Compressor.deflate(data), ContentType.Application.Json)
             }
             println(this.httpResponse!!.request.url)
         } catch (e: Exception) {
             e.printStackTrace()
             throw e
         }
-        return httpResponse!!.body()
+        return Compressor.inflate(httpResponse!!.body())
     }
 
 
