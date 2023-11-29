@@ -56,6 +56,7 @@ kotlin {
             implementation(libs.napier)
             implementation(libs.ktor.core)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.datetime)
         }
         jvmMain.dependencies {
             implementation(libs.ktor.client.okhttp)
