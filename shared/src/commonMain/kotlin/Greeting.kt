@@ -1,7 +1,5 @@
 class Greeting {
-
-
     fun greet(): String {
-        return "Hello!"
+        return "Hello! ${getPlatform().name}"
     }
 }
