@@ -10,6 +10,11 @@ import platform.Foundation.*
 import kotlinx.coroutines.*
 import kotlinx.cinterop.*
 import cocoapods.DataCompression.*
+import com.sbga.sdgbapp.Net.Packet.Packet
+import com.sbga.sdgbapp.Net.VO.NetQuery
+import com.sbga.sdgbapp.VO.Mai2.UserLoginRequestVO
+import com.sbga.sdgbapp.VO.Mai2.UserLoginResponseVO
+
 class Test {
     @Test
     fun aes() {
@@ -31,6 +36,9 @@ class Test {
     fun md() {
         println(MD5.md5("hello").encodeBase64())
     }
+    @Test fun crypt(){
+        println(CipherAES.encrypt("hello".encodeToByteArray()).joinToString(" "))
+    }
 
 
     @Test
@@ -42,4 +50,11 @@ class Test {
         val c = Compressor.inflate(a).onEach { print("${it.toInt()} ") }
     }
 
+    @Test fun request(){
+        runBlocking {
+            Packet().create(NetQuery<UserLoginRequestVO, UserLoginResponseVO>("UserLoginApi", 11029236u,
+                UserLoginRequestVO(11029236u, "", 1, 1641, "A63E01D8972", DateTime.getTimeStamp(), false, 0)
+            ))
+        }
+    }
 }

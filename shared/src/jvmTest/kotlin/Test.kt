@@ -74,8 +74,9 @@ class Test {
         println(CipherAES.decrypt(CipherAES.encrypt(b)).joinToString(" "))
         println(Compressor.deflate(b).joinToString(" "))
         println(Compressor.inflate(Compressor.deflate(b)).joinToString(" "))
-        val c = Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b)))
-        val d = CipherAES.decrypt(Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b))))
+        val c = Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b))).joinToString(" ")
+        println(c)
+//        val d = CipherAES.decrypt(Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b))))
     }
 
     @Test
