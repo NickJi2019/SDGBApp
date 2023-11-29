@@ -1,21 +1,22 @@
 [versions]
 ktor = "2.3.6"
+ktorClientCore = "2.3.5"
 logback = "1.4.11"
 compose = "1.5.4"
-compose-plugin = "1.5.10"
+compose-plugin = "1.5.11"
 compose-compiler = "1.5.4"
 agp = "8.1.3"
 android-minSdk = "24"
 android-compileSdk = "34"
 android-targetSdk = "34"
-androidx-activityCompose = "1.8.0"
+androidx-activityCompose = "1.8.1"
 androidx-core-ktx = "1.12.0"
 androidx-appcompat = "1.6.1"
 androidx-material = "1.10.0"
 androidx-constraintlayout = "2.1.4"
 androidx-test-junit = "1.1.5"
 androidx-espresso-core = "3.5.1"
-kotlin = "1.9.20"
+kotlin = "1.9.21"
 junit = "4.13.2"
 
 
@@ -82,3 +83,4 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 libres = { id = "io.github.skeptick.libres", version.ref = "libres" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
+kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
