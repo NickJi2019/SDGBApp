@@ -20,6 +20,7 @@ kotlin {
         browser()
         binaries.executable()
     }
+
     jvm("desktop")
 
     listOf(
@@ -35,7 +36,15 @@ kotlin {
     
     sourceSets {
         val desktopMain by getting
-        
+
+        commonMain.dependencies {
+            implementation(project(":shared"))
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material)
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.components.resources)
+        }
         androidMain.dependencies {
             implementation(libs.compose.ui)
             implementation(libs.compose.ui.tooling.preview)
@@ -43,14 +52,6 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
-        }
-        commonMain.dependencies {
-            implementation(projects.shared)
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.components.resources)
         }
         jsMain.dependencies {
             implementation(compose.html.core)
@@ -81,27 +82,25 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
     }
 }
-compose.experimental {
+
+compose.experimental{
     web.application {}
 }
+
 compose.desktop {
     application {
         mainClass = "MainKt"

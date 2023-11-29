@@ -1,13 +1,12 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.20"
+    alias(libs.plugins.kotlinCocoapods)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 kotlin {
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    jvm()
 
     androidTarget {
         compilations.all {
@@ -16,6 +15,30 @@ kotlin {
             }
         }
     }
+
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
+    cocoapods{
+        summary = "Some description for the Shared Module"
+        homepage = "Link to the Shared Module homepage"
+        version = "1.0"
+        ios.deploymentTarget = "14.0"
+        podfile = project.file("../iosApp/Podfile")
+        framework {
+            baseName = "shared"
+            isStatic = true
+        }
+
+        pod("DataCompression"){
+            source = git("https://github.com/mw99/DataCompression.git"){
+                branch = "master"
+            }
+        }
+
+    }
+
     js {
         browser {
             testTask {
@@ -27,34 +50,37 @@ kotlin {
         binaries.executable()
     }
 
-    jvm()
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.junit)
-            implementation("io.github.aakira:napier:2.6.1")
-            implementation("io.ktor:ktor-client-core:2.3.5")
-            implementation("io.ktor:ktor-client-encoding:2.3.5")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
-//            implementation("io.ktor:ktor-client-cio:$2.3.5")
-//            implementation(project(":compression"))
-//            implementation(project(":e2e"))
-            // put your Multiplatform dependencies here
-        }
-        jsTest.dependencies {
-            //TODO
-            implementation(kotlin("test-js"))
-        }
-        appleMain.dependencies {
-            implementation("io.ktor:ktor-client-darwin:2.3.5")
+            implementation(libs.napier)
+            implementation(libs.ktor.core)
+            implementation(libs.kotlinx.serialization.json)
         }
         jvmMain.dependencies {
-            implementation("io.ktor:ktor-client-okhttp:2.3.5")
+            implementation(libs.ktor.client.okhttp)
         }
         androidMain.dependencies {
-            implementation("io.ktor:ktor-client-okhttp:2.3.5")
+            implementation(libs.ktor.client.okhttp)
+
         }
+        appleMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+        jsMain.dependencies {
+            implementation(npm("crypto-js", "3.1.9-1"))
+        }
+
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
+        jsTest.dependencies {
+            implementation(kotlin("test-js"))
+        }
+        jvmTest.dependencies {
+            implementation(kotlin("test-junit"))
+        }
+
     }
 }
 
@@ -64,4 +90,12 @@ android {
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
     }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+}
+dependencies {
+    androidTestImplementation("junit:junit:4.13.2")
 }
