@@ -9,7 +9,7 @@ import platform.zlib.*
 import platform.Foundation.*
 import kotlinx.coroutines.*
 import kotlinx.cinterop.*
-
+import cocoapods.DataCompression.*
 class Test {
     @Test
     fun aes() {
@@ -32,19 +32,14 @@ class Test {
         println(MD5.md5("hello").encodeBase64())
     }
 
-    @OptIn(ExperimentalForeignApi::class)
-    @Test
-    fun zstream() {
-        println(sizeOf<z_stream>())
-
-    }
 
     @Test
     fun compress() {
-        val b = "hello".encodeToByteArray()
-        val a = Compressor.deflate(CipherAES.encrypt(b)).forEach { print(it.toInt()) }
-//        val c = Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b)))
-//        val d = CipherAES.decrypt(Compressor.inflate(Compressor.deflate(CipherAES.encrypt(b))))
+        val b = "hello".encodeToByteArray().onEach { print("${it.toInt()} ") }
+        println()
+        val a = Compressor.deflate(b).onEach { print("${it.toInt()} ") }
+        println()
+        val c = Compressor.inflate(a).onEach { print("${it.toInt()} ") }
     }
 
 }
