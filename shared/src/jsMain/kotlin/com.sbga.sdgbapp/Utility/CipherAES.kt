@@ -4,7 +4,6 @@ import kotlin.js.json
 
 //external fun decryptText(encryptedText: String, key: dynamic, iv: dynamic): String
 //external fun encryptText(text: String, key: dynamic, iv: dynamic): String
-external fun require(module: String): dynamic
 
 actual object CipherAES {
     //TODO
@@ -15,7 +14,7 @@ actual object CipherAES {
 
     init {
         println("aes init")
-        CryptoJS = require("crypto-js")
+        CryptoJS = js("require('crypto-js')")
         println("aes init")
         println(CryptoJS)
         key = CryptoJS.enc.Utf8.parse(AesKey)
@@ -23,19 +22,23 @@ actual object CipherAES {
     }
 
     actual fun encrypt(data: ByteArray): ByteArray {
+        TODO()
         return encrypt(data.decodeToString()).encodeToByteArray()
     }
 
     actual fun decrypt(data: ByteArray): ByteArray {
+        TODO()
         return decrypt(data.decodeToString()).encodeToByteArray()
     }
 
     actual fun encrypt(data: String): String {
+        TODO()
         return CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(data), key, json("iv" to iv))
             .toString(CryptoJS.enc.Utf8) as String
     }
 
     actual fun decrypt(data: String): String {
+        TODO()
         return CryptoJS.AES.decrypt(CryptoJS.enc.Utf8.parse(data), key, json("iv" to iv))
             .toString(CryptoJS.enc.Utf8) as String
     }
