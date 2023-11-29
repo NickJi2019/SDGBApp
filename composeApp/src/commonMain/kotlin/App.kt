@@ -35,13 +35,6 @@ fun App() {
                     null
                 )
             }
-            Text(CipherAES.encrypt("hello".encodeToByteArray()).contentToString())
-            Text(CipherAES.encrypt("hello".encodeToByteArray()).contentToString())
-            Text(CipherAES.encrypt("hello".encodeToByteArray()).contentToString())
-            Text(CipherAES.encrypt("hello".encodeToByteArray()).contentToString())
-            Text(CipherAES.encrypt("hello".encodeToByteArray()).contentToString())
-            Text(CipherAES.encrypt("hello".encodeToByteArray()).contentToString())
-            Text(CipherAES.encrypt("hello".encodeToByteArray()).contentToString())
         }
     }
 }
