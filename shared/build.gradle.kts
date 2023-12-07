@@ -30,13 +30,6 @@ kotlin {
             baseName = "shared"
             isStatic = true
         }
-
-        pod("DataCompression"){
-            source = git("https://github.com/mw99/DataCompression.git"){
-                branch = "master"
-            }
-        }
-
     }
 
     js {
