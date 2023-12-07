@@ -11,7 +11,6 @@ actual object Compressor {
         val output = ByteArray(data.size)
         val compressedDataLength = deflater.deflate(output)
         deflater.end()
-        TODO()
         return output.copyOf(compressedDataLength)
     }
 
@@ -42,7 +41,6 @@ actual object Compressor {
             }
         }
         inflater.end()
-        TODO()
         // 返回实际大小的字节数组
         return output.copyOf(outputSize)
     }

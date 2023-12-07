@@ -68,7 +68,6 @@ class Test {
     @Test
     fun compress() {
         val b = "hello".encodeToByteArray()
-        val a = Compressor.deflate(CipherAES.encrypt(b))
         println(b.joinToString(" "))
         println(CipherAES.encrypt(b).joinToString(" "))
         println(CipherAES.decrypt(CipherAES.encrypt(b)).joinToString(" "))
@@ -81,15 +80,16 @@ class Test {
 
     @Test
     fun http() {
-        runBlocking {
-            Packet().create(
-                NetQuery(
-                    "UserLoginApi", 11029236u,
-                    UserLoginRequestVO(
-                        11029236u, "", 1, 1641, "A63E01D8972", (System.currentTimeMillis() / 1000), false, 0
-                    )
-                )
-            ).query.getResponse<UserLoginResponseVO>()
-        }
+
+//        runBlocking {
+//            Packet().create(
+//                NetQuery(
+//                    "UserLoginApi", 11029236u,
+//                    UserLoginRequestVO(
+//                        11029236u, "", 1, 1641, "A63E01D8972", (System.currentTimeMillis() / 1000), false, 0
+//                    )
+//                )
+//            ).query.getResponse<UserLoginResponseVO>()
+//        }
     }
 }
