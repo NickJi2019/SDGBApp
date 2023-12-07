@@ -28,9 +28,23 @@ class Test {
         MD5.md5("hello"). onEach { print("${it.toInt()} ") }
     }
     @Test fun crypt(){
+        println()
         val b = "hello".encodeToByteArray().onEach { print("${it.toInt()} ") }
+        println()
         val a = CipherAES.encrypt(b).onEach { print("${it.toInt()} ") }
+        println()
         val c = CipherAES.decrypt(a).onEach { print("${it.toInt()} ") }
+        println()
+        val d={
+            println()
+            val b = "hellohellohellohellohello".encodeToByteArray().onEach { print("${it.toInt()} ") }
+            println()
+            val a = CipherAES.encrypt(b).onEach { print("${it.toInt()} ") }
+            println()
+            val c = CipherAES.decrypt(a).onEach { print("${it.toInt()} ") }
+            println()
+        }
+        d()
     }
 
 
