@@ -1,83 +1,68 @@
 package com.sbga.sdgbapp.Utility
 
 
+import com.sbga.sdgbapp.Utility.Compressor.log
 import kotlinx.cinterop.*
 import platform.CoreCrypto.*
-import platform.posix.calloc
+import platform.posix.*
+
+@OptIn(ExperimentalForeignApi::class)
 
 actual object CipherAES {
-    @OptIn(ExperimentalForeignApi::class)
-    actual fun encrypt(data: ByteArray): ByteArray {
+    fun crypt(data: ByteArray, operation:CCOperation):ByteArray{
         memScoped {
-            val dataPtr = data.toUByteArray().toCValues()
-            val keyPtr = AesKey.encodeToByteArray().toCValues()
-            val ivPtr = AesIV.encodeToByteArray().toCValues()
+            val outputLength = alloc<size_tVar>()
+            outputLength.value = when (operation) {
+                    kCCEncrypt -> {
+                        ((data.size + 15) / 16 * 16).convert<size_t>()
+                    }
+                    kCCDecrypt -> {
+                        data.size.convert<size_t>()
+                    }
+                    else -> {
+                        throw Exception("operation error")
+                    }
+                }
 
-            val digestLength = ((data.size + 15) / 16 * 16)
-            val bufferData = calloc(digestLength.convert(), Byte.SIZE_BITS.convert())
+            val outputData:CValuesRef<*> = allocArray<ByteVar>(outputLength.value.toInt())
 
-            val status = CCCrypt(
-                kCCEncrypt,
+            CCCrypt(
+                operation,
                 kCCAlgorithmAES,
                 kCCOptionPKCS7Padding,
-                keyPtr,
+                AesKey.encodeToByteArray().toCValues(),
                 kCCKeySizeAES256.convert(),
-                ivPtr,
-                dataPtr,
+                AesIV.encodeToByteArray().toCValues(),
+                data.toCValues(),
                 data.size.convert(),
-                bufferData,
-                kCCBlockSizeAES128.convert(),
-                null
-            )
-            if (status != kCCSuccess || bufferData == null) {
-                throw Exception("AES encryption failed with status $status")
-            } else {
-                bufferData.usePinned {
-                    return it.get().readBytes(digestLength.toInt())
+                outputData,
+                outputLength.value.convert(),
+                outputLength.ptr
+            ).let {
+                if (it == kCCSuccess) {
+                    log.info("crypt success")
+                } else {
+                    log.error("crypt error")
+                    throw Exception("crypt error")
                 }
             }
+            return outputData.getPointer(this).readBytes(outputLength.value.toInt())
         }
     }
+    actual fun encrypt(data: ByteArray): ByteArray {
+        return crypt(data,kCCEncrypt)
+    }
 
-    @OptIn(ExperimentalForeignApi::class)
     actual fun decrypt(data: ByteArray): ByteArray {
-        memScoped {
-            val dataPtr = data.toUByteArray().toCValues()
-            val keyPtr = AesKey.encodeToByteArray().toCValues()
-            val ivPtr = AesIV.encodeToByteArray().toCValues()
-
-            val digestLength = ((data.size + 15) / 16 * 16)
-            val bufferData = calloc(digestLength.convert(), Byte.SIZE_BITS.convert())
-
-            val status = CCCrypt(
-                kCCDecrypt,
-                kCCAlgorithmAES,
-                kCCOptionPKCS7Padding,
-                keyPtr,
-                kCCKeySizeAES256.convert(),
-                ivPtr,
-                dataPtr,
-                data.size.convert(),
-                bufferData,
-                kCCBlockSizeAES128.convert(),
-                null
-            )
-            if (status != kCCSuccess || bufferData == null) {
-                throw Exception("AES encryption failed with status $status")
-            } else {
-                bufferData.usePinned {
-                    return it.get().readBytes(digestLength.toInt())
-                }
-            }
-        }
+        return crypt(data,kCCDecrypt)
     }
 
     actual fun encrypt(data: String): String {
-        return encrypt(data.encodeToByteArray()).decodeToString()
+        return crypt(data.encodeToByteArray(), kCCEncrypt).decodeToString()
     }
 
     actual fun decrypt(data: String): String {
-        return decrypt(data.encodeToByteArray()).decodeToString()
+        return crypt(data.encodeToByteArray(), kCCDecrypt).decodeToString()
     }
 
 }

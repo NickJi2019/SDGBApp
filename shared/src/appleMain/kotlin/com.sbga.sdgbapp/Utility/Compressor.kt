@@ -22,9 +22,10 @@ actual object Compressor {
                     log.info("deflate success")
                 } else {
                     log.error("deflate error")
+                    throw Exception("deflate error")
                 }
             }
-            return outputData.getPointer(this).readBytes(outputLength.value.toInt())
+            return outputData.getPointer(this).readBytes(outputLength.value.toInt()+1)
         }
     }
 
@@ -35,7 +36,7 @@ actual object Compressor {
             }
             var outputData = allocArray<uBytefVar>(outputLength.value.toInt())
             val inputData = data.toUByteArray().toCValues()
-            var flag=0
+            var flag: Int
             while(uncompress(outputData, outputLength.ptr, inputData, data.size.convert()).also { flag = it } == Z_BUF_ERROR){
                 outputLength.value *= 2u
 
@@ -49,6 +50,7 @@ actual object Compressor {
                 log.info("inflate success")
             } else {
                 log.error("inflate error")
+                throw Exception("inflate error")
             }
 
             return outputData.getPointer(this).readBytes(outputLength.value.toInt())
