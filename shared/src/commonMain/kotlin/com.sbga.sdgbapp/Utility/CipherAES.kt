@@ -7,8 +7,16 @@ val AesKey: String = "F2Rc8F0x2Ly6LiIFy9K>s_Y0Bum62H;R"
 val AesIV: String = "PR12H;E2Brw@5kJ<"
 
 expect object CipherAES {
-    fun encrypt(data: String):String
-    fun decrypt(data: String):String
-    fun encrypt(data: ByteArray):ByteArray
-    fun decrypt(data: ByteArray):ByteArray
+    fun encrypt(data:String): String
+    fun decrypt(data: String): String
+    fun encrypt(data: ByteArray): ByteArray
+    fun decrypt(data: ByteArray): ByteArray
+
+}
+
+object CipherAESExtension {
+    fun String.encrypt(): String = CipherAES.encrypt(this)
+    fun String.decrypt(): String = CipherAES.decrypt(this)
+    fun ByteArray.encrypt(): ByteArray = CipherAES.encrypt(this)
+    fun ByteArray.decrypt(): ByteArray = CipherAES.decrypt(this)
 }

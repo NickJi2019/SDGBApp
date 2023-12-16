@@ -1,5 +1,5 @@
 const TerserPlugin = require("terser-webpack-plugin");
-
+var a = 1;
 config.optimization = config.optimization || {};
 config.optimization.minimize = true;
 config.optimization.minimizer = [

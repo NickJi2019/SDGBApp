@@ -1,5 +1,6 @@
 package com.sbga.sdgbapp.Utility
 
+import java.io.ByteArrayOutputStream
 import java.util.zip.*
 
 actual object Compressor {
@@ -8,10 +9,23 @@ actual object Compressor {
         deflater.reset()
         deflater.setInput(data)
         deflater.finish()
-        val output = ByteArray(data.size)
-        val compressedDataLength = deflater.deflate(output)
+
+        val buffer = ByteArray(1024)
+        val output = ByteArrayOutputStream()
+        var outputSize = 0
+
+        while (!deflater.finished()) {
+            val justDeflatedSize = deflater.deflate(buffer)
+            if (justDeflatedSize > 0) {
+                output.write(buffer, 0, justDeflatedSize)
+                outputSize += justDeflatedSize
+            } else if (justDeflatedSize == 0 && deflater.needsInput()) {
+                // 如果没有更多数据可用，退出循环
+                break
+            }
+        }
         deflater.end()
-        return output.copyOf(compressedDataLength)
+        return output.toByteArray()
     }
 
 
@@ -20,20 +34,14 @@ actual object Compressor {
         inflater.reset()
         inflater.setInput(data)
 
-        var output = ByteArray(data.size * 2) // 初始化一个足够大的字节数组
+        val output = ByteArrayOutputStream() // 初始化一个足够大的字节数组
         var outputSize = 0 // 输出字节数组的大小
+        val buffer = ByteArray(1024)
 
-        var buffer = ByteArray(1024)
         while (!inflater.finished()) {
             val justInflatedSize = inflater.inflate(buffer)
             if (justInflatedSize > 0) {
-                if (outputSize + justInflatedSize > output.size) {
-                    // 如果输出缓冲区不够大，扩展输出缓冲区的大小
-                    val newOutput = ByteArray(output.size * 2)
-                    System.arraycopy(output, 0, newOutput, 0, outputSize)
-                    output = newOutput
-                }
-                System.arraycopy(buffer, 0, output, outputSize, justInflatedSize)
+                output.write(buffer, 0, justInflatedSize)
                 outputSize += justInflatedSize
             } else if (justInflatedSize == 0 && inflater.needsInput()) {
                 // 如果没有更多数据可用，退出循环
@@ -42,6 +50,6 @@ actual object Compressor {
         }
         inflater.end()
         // 返回实际大小的字节数组
-        return output.copyOf(outputSize)
+        return output.toByteArray()
     }
 }

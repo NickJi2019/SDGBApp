@@ -1,5 +1,8 @@
 
-import com.sbga.sdgbapp.Utility.*
+import com.sbga.sdgbapp.Utility.CipherAESExtension.decrypt
+import com.sbga.sdgbapp.Utility.CipherAESExtension.encrypt
+import com.sbga.sdgbapp.Utility.Compressor
+import com.sbga.sdgbapp.Utility.MD5
 import com.sbga.sdgbapp.VO.VOSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -9,7 +12,7 @@ import kotlin.test.Test
 class Test {
     @Test
     fun aes() {
-        println(CipherAES.encrypt("hello"))
+        println("hello".encrypt())
     }
 
     @Test
@@ -31,17 +34,17 @@ class Test {
         println()
         val b = "hello".encodeToByteArray().onEach { print("${it.toInt()} ") }
         println()
-        val a = CipherAES.encrypt(b).onEach { print("${it.toInt()} ") }
+        val a = b.encrypt().onEach { print("${it.toInt()} ") }
         println()
-        val c = CipherAES.decrypt(a).onEach { print("${it.toInt()} ") }
+        val c = a.decrypt().onEach { print("${it.toInt()} ") }
         println()
         val d={
             println()
             val b = "hellohellohellohellohello".encodeToByteArray().onEach { print("${it.toInt()} ") }
             println()
-            val a = CipherAES.encrypt(b).onEach { print("${it.toInt()} ") }
+            val a = b.encrypt().onEach { print("${it.toInt()} ") }
             println()
-            val c = CipherAES.decrypt(a).onEach { print("${it.toInt()} ") }
+            val c = a.decrypt().onEach { print("${it.toInt()} ") }
             println()
         }
         d()
