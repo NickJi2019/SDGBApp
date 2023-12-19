@@ -6,38 +6,35 @@ import javax.crypto.spec.SecretKeySpec
 
 
 actual object CipherAES {
-
-
-    private val encryptInstance: Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding").apply {
+    private val encrypter = Cipher.getInstance("AES/CBC/PKCS5Padding").apply {
         init(
-            Cipher.ENCRYPT_MODE,
-            SecretKeySpec(AesKey.toByteArray(), "AES"),
-            IvParameterSpec(AesIV.toByteArray())
+            Cipher.ENCRYPT_MODE, SecretKeySpec(SecureManager.AES.key.toByteArray(), "AES"), IvParameterSpec(
+                SecureManager.AES.iv.toByteArray()
+            )
         )
     }
-    private val decryptInstance: Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding").apply {
+    private val decrypter = Cipher.getInstance("AES/CBC/PKCS5Padding").apply {
         init(
-            Cipher.DECRYPT_MODE,
-            SecretKeySpec(AesKey.toByteArray(), "AES"),
-            IvParameterSpec(AesIV.toByteArray())
+            Cipher.DECRYPT_MODE, SecretKeySpec(SecureManager.AES.key.toByteArray(), "AES"), IvParameterSpec(
+                SecureManager.AES.iv.toByteArray()
+            )
         )
-    }
-
-
-    actual fun encrypt(data: ByteArray): ByteArray {
-        return encryptInstance.doFinal(data)
-    }
-
-    actual fun decrypt(data: ByteArray): ByteArray {
-        return decryptInstance.doFinal(data)
     }
 
     actual fun encrypt(data: String): String {
-        return encrypt(data.encodeToByteArray()).decodeToString()
+        return encrypt(data.toByteArray()).decodeToString()
+    }
+
+    actual fun encrypt(data: ByteArray): ByteArray {
+        return encrypter.doFinal(data)
     }
 
     actual fun decrypt(data: String): String {
-        return decrypt(data.encodeToByteArray()).decodeToString()
+        return decrypt(data.toByteArray()).decodeToString()
+    }
+
+    actual fun decrypt(data: ByteArray): ByteArray {
+        return decrypter.doFinal(data)
     }
 
 }

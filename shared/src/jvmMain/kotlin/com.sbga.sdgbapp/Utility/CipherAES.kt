@@ -7,10 +7,12 @@ import javax.crypto.spec.SecretKeySpec
 
 actual object CipherAES {
     private val encrypter = Cipher.getInstance("AES/CBC/PKCS5Padding").apply {
-        init(Cipher.ENCRYPT_MODE, SecretKeySpec(AesKey.toByteArray(), "AES"), IvParameterSpec(AesIV.toByteArray()))
+        init(Cipher.ENCRYPT_MODE, SecretKeySpec(SecureManager.AES.key.toByteArray(), "AES"), IvParameterSpec(
+            SecureManager.AES.iv.toByteArray()))
     }
     private val decrypter = Cipher.getInstance("AES/CBC/PKCS5Padding").apply {
-        init(Cipher.DECRYPT_MODE, SecretKeySpec(AesKey.toByteArray(), "AES"), IvParameterSpec(AesIV.toByteArray()))
+        init(Cipher.DECRYPT_MODE, SecretKeySpec(SecureManager.AES.key.toByteArray(), "AES"), IvParameterSpec(
+            SecureManager.AES.iv.toByteArray()))
     }
     actual fun encrypt(data:String): String {
         return encrypt(data.toByteArray()).decodeToString()
