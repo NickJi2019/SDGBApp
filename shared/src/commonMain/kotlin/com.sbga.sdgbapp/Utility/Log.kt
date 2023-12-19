@@ -4,11 +4,11 @@ import io.github.aakira.napier.Napier
 
 class Log {
     fun verbose(vararg str: String) {
-        Napier.i(str.joinToString(" "))
+        Napier.v(str.joinToString(" "))
     }
 
     fun debug(vararg str: String) {
-        Napier.i(str.joinToString(" "))
+        Napier.d(str.joinToString(" "))
     }
 
     fun info(vararg str: String) {
@@ -16,11 +16,11 @@ class Log {
     }
 
     fun warn(vararg str: String) {
-        Napier.i(str.joinToString(" "))
+        Napier.w(str.joinToString(" "))
     }
 
     fun error(vararg str: String) {
-        Napier.i(str.joinToString(" "))
+        Napier.e(str.joinToString(" "))
     }
 
 }

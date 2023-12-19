@@ -50,6 +50,7 @@ kotlin {
             implementation(libs.ktor.core)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
+            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.0")
         }
         jvmMain.dependencies {
             implementation(libs.ktor.client.okhttp)
@@ -91,5 +92,6 @@ android {
 
 }
 dependencies {
+    implementation("io.ktor:ktor-client-okhttp-jvm:2.3.6")
     androidTestImplementation("junit:junit:4.13.2")
 }
