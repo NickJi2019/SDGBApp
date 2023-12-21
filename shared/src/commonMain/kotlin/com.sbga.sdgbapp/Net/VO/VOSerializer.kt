@@ -1,4 +1,4 @@
-package com.sbga.sdgbapp.VO
+package com.sbga.sdgbapp.Net.VO
 
 import kotlinx.serialization.Serializable
 

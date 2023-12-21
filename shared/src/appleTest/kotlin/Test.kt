@@ -1,15 +1,24 @@
 
-import com.sbga.sdgbapp.Utility.CipherAESExtension.decrypt
-import com.sbga.sdgbapp.Utility.CipherAESExtension.encrypt
-import com.sbga.sdgbapp.Utility.Compressor
-import com.sbga.sdgbapp.Utility.MD5
-import com.sbga.sdgbapp.VO.VOSerializer
+import com.sbga.sdgbapp.Net.Packet.NetIO
+import com.sbga.sdgbapp.Net.VO.Mai2.UserLoginRequestVO
+import com.sbga.sdgbapp.Net.VO.Mai2.UserLoginResponseVO
+import com.sbga.sdgbapp.Net.VO.NetQuery
+import com.sbga.sdgbapp.Net.VO.VOSerializer
+import com.sbga.sdgbapp.Utility.*
+import com.sbga.sdgbapp.Utility.Extensions.decrypt
+import com.sbga.sdgbapp.Utility.Extensions.encrypt
+import com.sbga.sdgbapp.Utility.Extensions.serialize
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 
 class Test {
+    @Test fun log(){
+        log.warn("w")
+        log.info("i")
+        log.error("e")
+    }
     @Test
     fun aes() {
         println("hello".encrypt())
@@ -60,11 +69,23 @@ class Test {
         val c = Compressor.inflate(a).onEach { print("${it.toInt()} ") }
     }
 
-//    @Test fun request(){
-//        runBlocking {
-//            Packet().create(NetQuery<UserLoginRequestVO, UserLoginResponseVO>("UserLoginApi", 11029236u,
-//                UserLoginRequestVO(11029236u, "", 1, 1641, "A63E01D8972", DateTime.getTimeStamp(), false, 0)
-//            ))
-//        }
-//    }
+    @Test fun http() {
+
+    }
+    @Test fun finalLogicTest() {
+        NetIO.sendRequest(NetQuery<UserLoginRequestVO, UserLoginResponseVO>("UserLoginApi", 123456u).apply {
+            request = UserLoginRequestVO(
+                userId = 123456u,
+                accessCode = "",
+                regionId = 1,
+                placeId = 1641,
+                clientId = "A63E01D8972",
+                dateTime = DateTime.getTimeStamp().toString(),
+                isContinue = false,
+                genericFlag = 0
+            )
+        }).also {
+            println(it.response.serialize())
+        }
+    }
 }

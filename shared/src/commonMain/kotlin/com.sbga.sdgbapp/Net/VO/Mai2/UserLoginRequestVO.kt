@@ -1,17 +1,17 @@
-package com.sbga.sdgbapp.VO.Mai2
+package com.sbga.sdgbapp.Net.VO.Mai2
 
-import com.sbga.sdgbapp.VO.VOSerializer
+import com.sbga.sdgbapp.Net.VO.VOSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 class UserLoginRequestVO(
-    @SerialName("userId") val userId: ULong,
-    @SerialName("accessCode") val accessCode: String,
-    @SerialName("regionId") val regionId: Int,
-    @SerialName("placeId") val placeId: Int,
+    @SerialName("dateTime") val dateTime: String,
+    @SerialName("genericFlag") val genericFlag: Int,
     @SerialName("clientId") val clientId: String,
-    @SerialName("dateTime") val dateTime: Long,
+    @SerialName("regionId") val regionId: Int,
+    @SerialName("accessCode") val accessCode: String,
+    @SerialName("userId") val userId: ULong,
     @SerialName("isContinue") val isContinue: Boolean,
-    @SerialName("genericFlag") val genericFlag: Int
+    @SerialName("placeId") val placeId: Int
 ) : VOSerializer()

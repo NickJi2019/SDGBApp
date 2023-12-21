@@ -1,6 +1,6 @@
-package com.sbga.sdgbapp.VO.Mai2
+package com.sbga.sdgbapp.Net.VO.Mai2
 
-import com.sbga.sdgbapp.VO.VOSerializer
+import com.sbga.sdgbapp.Net.VO.VOSerializer
 import kotlinx.serialization.Serializable
 
 @Serializable

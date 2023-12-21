@@ -6,13 +6,18 @@ object DateTime {
         return (Clock.System.now().toEpochMilliseconds() / 1000)
     }
 
-    fun getDateTime(): String {
+    fun getLocalDateTime(): String {
         val dateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        return "${dateTime.date} ${dateTime.time.hour.toString().padStart(2, '0')}:${dateTime.time.minute.toString().padStart(2, '0')}:${dateTime.time.second.toString().padStart(2, '0')}"
+    }
+
+    fun getChinaDateTime(): String {
+        val dateTime = Clock.System.now().toLocalDateTime(TimeZone.of("Asia/Shanghai"))
         return "${dateTime.date} ${dateTime.time.hour.toString().padStart(2, '0')}:${dateTime.time.minute.toString().padStart(2, '0')}:${dateTime.time.second.toString().padStart(2, '0')}.0"
     }
 
-    fun getDate(): String {
-        return Clock.System.todayAt(TimeZone.currentSystemDefault()).toString()
+    fun getChinaDate(): String {
+        return Clock.System.todayIn(TimeZone.of("Asia/Shanghai")).toString()
     }
 
     fun getTokyoDateTime(): String {

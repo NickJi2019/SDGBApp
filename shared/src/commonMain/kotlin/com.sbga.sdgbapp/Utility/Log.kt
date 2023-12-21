@@ -1,26 +1,30 @@
 package com.sbga.sdgbapp.Utility
 
-import io.github.aakira.napier.Napier
-
-class Log {
+object Log {
+    private fun template(msg:String,level:String):String{
+        return "${DateTime.getLocalDateTime()} $level $msg"
+    }
     fun verbose(vararg str: String) {
-        Napier.v(str.joinToString(" "))
+
+        println(template(str.joinToString(" "), "[VERBOSE]"))
     }
 
     fun debug(vararg str: String) {
-        Napier.d(str.joinToString(" "))
+        println(template(str.joinToString(" "), "[ DEBUG ]"))
     }
 
     fun info(vararg str: String) {
-        Napier.i(str.joinToString(" "))
+        println(template(str.joinToString(" "), "[ INFO  ]"))
     }
 
     fun warn(vararg str: String) {
-        Napier.w(str.joinToString(" "))
+        println(template(str.joinToString(" "), "[ WARN  ]"))
     }
 
     fun error(vararg str: String) {
-        Napier.e(str.joinToString(" "))
+        println(template(str.joinToString(" "), "[ ERROR ]"))
     }
 
 }
+
+typealias log = Log

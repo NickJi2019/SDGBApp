@@ -2,13 +2,13 @@ package com.sbga.sdgbapp.Utility
 
 
 import kotlinx.cinterop.*
-import platform.posix.*
+import platform.posix.free
+import platform.posix.memcpy
 import platform.zlib.*
 
 @OptIn(ExperimentalForeignApi::class)
 
 actual object Compressor {
-    val log = Log()
     actual fun deflate(data: ByteArray): ByteArray {
         memScoped{
             val outputLength = alloc<uLongfVar>().apply {
