@@ -1,6 +1,6 @@
 package com.sbga.sdgbapp.Net.Packet
 
-import com.sbga.sdgbapp.Manager
+import com.sbga.sdgbapp.ConfigManager
 import com.sbga.sdgbapp.Net.VO.NetQuery
 import com.sbga.sdgbapp.Net.VO.VOSerializer
 import com.sbga.sdgbapp.Utility.Extensions.decrypt
@@ -14,7 +14,7 @@ import com.sbga.sdgbapp.Utility.NetHttpsClient
 object NetIO {
     @OptIn(ExperimentalStdlibApi::class)
     inline fun <reified T0 : VOSerializer,reified T1 : VOSerializer> sendRequest(data:NetQuery<T0,T1>):NetQuery<T0,T1> {
-        val client = NetHttpsClient(Manager.maiApiURL + getEndpoint(data)).apply {
+        val client = NetHttpsClient(ConfigManager.maiApiURL + getEndpoint(data)).apply {
             headers = mapOf(
                 "Content-Type" to "application/json",
                 "User-Agent" to getUserAgent(data),
@@ -33,7 +33,7 @@ object NetIO {
 
     @OptIn(ExperimentalStdlibApi::class)
     fun obfuscator(str: String): String {
-        var endpoint = MD5.md5(str + Manager.SecureManager.obfuscate.obfuscateParam).toHexString()
+        var endpoint = MD5.md5(str + ConfigManager.SecureManager.obfuscate.obfuscateParam).toHexString()
         if (endpoint.length == 31) endpoint = "0$endpoint"
         return endpoint
     }
@@ -45,7 +45,7 @@ object NetIO {
         if (query.UserId != 0uL) {
             return "${getEndpoint(query)}#${query.UserId}"
         }
-        return "${getEndpoint(query)}#${Manager.clientId}"
+        return "${getEndpoint(query)}#${ConfigManager.clientId}"
     }
 
 

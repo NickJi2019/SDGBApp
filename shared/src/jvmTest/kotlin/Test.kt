@@ -1,5 +1,6 @@
 
 import com.sbga.sdgbapp.Net.Packet.NetIO
+import com.sbga.sdgbapp.Net.Packet.Packet
 import com.sbga.sdgbapp.Net.VO.Mai2.UserLoginRequestVO
 import com.sbga.sdgbapp.Net.VO.Mai2.UserLoginResponseVO
 import com.sbga.sdgbapp.Net.VO.NetQuery
@@ -92,6 +93,13 @@ class Test {
             )
         }).also {
             println(it.response.serialize())
+        }
+    }
+
+    @Test fun login(){
+        Packet.userLogin(11029236u,"",false,0).let {
+            log.info(it.returnCode, it.lastLoginDate, it.loginCount, it.consecutiveLoginCount, it.loginId)
+            log.info(it.serialize())
         }
     }
 }

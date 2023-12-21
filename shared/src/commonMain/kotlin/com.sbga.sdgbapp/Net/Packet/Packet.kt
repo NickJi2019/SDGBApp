@@ -1,6 +1,6 @@
 package com.sbga.sdgbapp.Net.Packet
 
-import com.sbga.sdgbapp.Manager
+import com.sbga.sdgbapp.ConfigManager
 import com.sbga.sdgbapp.Net.VO.Mai2.*
 import com.sbga.sdgbapp.Net.VO.NetQuery
 import com.sbga.sdgbapp.Utility.DateTime
@@ -41,7 +41,7 @@ object Packet{
     fun getGameSetting():GameSettingResponseVO{
         return NetIO.sendRequest(
             NetQuery<GameSettingRequestVO,GameSettingResponseVO>("GetGameSettingApi",0uL).apply {
-                request = GameSettingRequestVO(placeId = Manager.placeId, clientId = Manager.clientId)
+                request = GameSettingRequestVO(placeId = ConfigManager.placeId, clientId = ConfigManager.clientId)
             }
         ).response?:throw Exception("No response")
     }
@@ -318,7 +318,7 @@ object Packet{
     fun upsertUserAll(index:Int, userId:ULong, src:UserAll, loginVO:UserLoginResponseVO):UpsertResponseVO{
         return NetIO.sendRequest(
             NetQuery<UserAllRequestVO,UpsertResponseVO>("UpsertUserAllApi", userId).apply {
-                request = UserAllRequestVO(userId, loginVO.loginId?:0uL, Manager.isEventMode, Manager.isFreePlay, src)
+                request = UserAllRequestVO(userId, loginVO.loginId?:0uL, ConfigManager.isEventMode, ConfigManager.isFreePlay, src)
             }
         ).response?:throw Exception("No response")
     }
@@ -331,9 +331,9 @@ object Packet{
                     accessCode = accessCode,
                     isContinue = isContinue,
                     genericFlag = genericFlag,
-                    placeId = Manager.placeId,
-                    regionId = Manager.regionId,
-                    clientId = Manager.clientId,
+                    placeId = ConfigManager.placeId,
+                    regionId = ConfigManager.regionId,
+                    clientId = ConfigManager.clientId,
                     dateTime = DateTime.getTimeStamp().toString()
                 )
             }

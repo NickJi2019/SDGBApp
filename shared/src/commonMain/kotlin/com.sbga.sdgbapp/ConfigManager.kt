@@ -1,6 +1,6 @@
 package com.sbga.sdgbapp
 
-object Manager {
+object ConfigManager {
     const val maiApiURL = "https://maimai-gm.wahlap.com:42081/Maimai2Servlet/"
     const val clientId: String = "A63E01D8972"
     const val placeId = 1641

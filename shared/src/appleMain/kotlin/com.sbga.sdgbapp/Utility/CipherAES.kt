@@ -1,7 +1,7 @@
 package com.sbga.sdgbapp.Utility
 
 
-import com.sbga.sdgbapp.Manager
+import com.sbga.sdgbapp.ConfigManager
 import kotlinx.cinterop.*
 import platform.CoreCrypto.*
 import platform.posix.size_t
@@ -31,9 +31,9 @@ actual object CipherAES {
                 operation,
                 kCCAlgorithmAES,
                 kCCOptionPKCS7Padding,
-                Manager.SecureManager.AES.key.encodeToByteArray().toCValues(),
+                ConfigManager.SecureManager.AES.key.encodeToByteArray().toCValues(),
                 kCCKeySizeAES256.convert(),
-                Manager.SecureManager.AES.iv.encodeToByteArray().toCValues(),
+                ConfigManager.SecureManager.AES.iv.encodeToByteArray().toCValues(),
                 data.toCValues(),
                 data.size.convert(),
                 outputData,
