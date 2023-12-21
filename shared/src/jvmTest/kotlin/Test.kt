@@ -97,8 +97,8 @@ class Test {
     }
 
     @Test fun login(){
-        Packet.userLogin(11029236u,"",false,0).let {
-            log.info(it.returnCode, it.lastLoginDate, it.loginCount, it.consecutiveLoginCount, it.loginId)
+        Packet.userLogout(10795488u).let {
+            log.info(it.returnCode)
             log.info(it.serialize())
         }
     }
