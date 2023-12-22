@@ -47,20 +47,20 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.napier)
-            implementation(libs.ktor.core)
+//            implementation(libs.ktor.core)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.0")
         }
         jvmMain.dependencies {
-            implementation(libs.ktor.client.okhttp)
+//            implementation(libs.ktor.client.okhttp)
         }
         androidMain.dependencies {
-            implementation(libs.ktor.client.okhttp)
+//            implementation(libs.ktor.client.okhttp)
 
         }
         appleMain.dependencies {
-            implementation(libs.ktor.client.darwin)
+//            implementation(libs.ktor.client.darwin)
         }
         jsMain.dependencies {
             implementation(npm("crypto-js", "3.1.9-1"))
