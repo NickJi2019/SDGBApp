@@ -1,5 +1,6 @@
 
 import com.sbga.sdgbapp.Net.Packet.NetIO
+import com.sbga.sdgbapp.Net.Packet.Packet
 import com.sbga.sdgbapp.Net.VO.Mai2.UserLoginRequestVO
 import com.sbga.sdgbapp.Net.VO.Mai2.UserLoginResponseVO
 import com.sbga.sdgbapp.Net.VO.NetQuery
@@ -8,6 +9,7 @@ import com.sbga.sdgbapp.Utility.*
 import com.sbga.sdgbapp.Utility.Extensions.decrypt
 import com.sbga.sdgbapp.Utility.Extensions.encrypt
 import com.sbga.sdgbapp.Utility.Extensions.serialize
+import com.sbga.sdgbapp.Utility.Extensions.sha256
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -87,5 +89,15 @@ class Test {
         }).also {
             println(it.response.serialize())
         }
+    }
+
+    @Test fun login(){
+        Packet.userLogout(10795488u).let {
+            log.info(it.returnCode)
+            log.info(it.serialize())
+        }
+    }
+    @Test fun sha256(){
+        println("hello".sha256())
     }
 }

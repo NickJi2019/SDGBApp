@@ -7,12 +7,13 @@ import com.sbga.sdgbapp.Utility.DateTime
 
 
 object Packet{
+    private val e:Exception = Exception("No response")
     fun getGameCharge():GameChargeResponseVO{
         return NetIO.sendRequest(
             NetQuery<GameChargeRequestVO,GameChargeResponseVO>("GetGameChargeApi",0uL).apply {
                 request = GameChargeRequestVO(isAll = false)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getGameEvent():GameEventResponseVO{
@@ -20,7 +21,7 @@ object Packet{
             NetQuery<GameEventRequestVO,GameEventResponseVO>("GetGameEventApi",0uL).apply {
                 request = GameEventRequestVO(type = 1, isAllEvent = true)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getGameNgMusicId():GameNgMusicIdResponseVO{
@@ -28,7 +29,7 @@ object Packet{
             NetQuery<GameNgMusicIdRequestVO,GameNgMusicIdResponseVO>("GetGameNgMusicIdApi",0uL).apply {
                 request = GameNgMusicIdRequestVO()
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getGameRanking():GameRankingResponseVO{
@@ -36,14 +37,14 @@ object Packet{
             NetQuery<GameRankingRequestVO,GameRankingResponseVO>("GetGameRankingApi",0uL).apply {
                 request = GameRankingRequestVO()
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
     fun getGameSetting():GameSettingResponseVO{
         return NetIO.sendRequest(
             NetQuery<GameSettingRequestVO,GameSettingResponseVO>("GetGameSettingApi",0uL).apply {
                 request = GameSettingRequestVO(placeId = ConfigManager.placeId, clientId = ConfigManager.clientId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getGameTournamentInfo():GameTournamentInfoResponseVO{
@@ -51,7 +52,7 @@ object Packet{
             NetQuery<GameTournamentInfoRequestVO,GameTournamentInfoResponseVO>("GetGameTournamentInfoApi",0uL).apply {
                 request = GameTournamentInfoRequestVO()
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getTransferFriend(userId:ULong):TransferFriendResponseVO{
@@ -59,14 +60,14 @@ object Packet{
             NetQuery<TransferFriendRequestVO,TransferFriendResponseVO>("GetTransferFriendApi",userId).apply {
                 request = TransferFriendRequestVO(userId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
     fun getUserActivity(userId: ULong):UserActivityResponseVO{
         return NetIO.sendRequest(
             NetQuery<UserActivityRequestVO,UserActivityResponseVO>("GetUserActivityApi",userId).apply {
                 request = UserActivityRequestVO(userId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserCard(userId: ULong):UserCardResponseVO{
@@ -74,7 +75,7 @@ object Packet{
             NetQuery<UserCardRequestVO,UserCardResponseVO>("GetUserCardApi",userId).apply {
                 request = UserCardRequestVO(userId, 0)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserCharacter(userId: ULong):UserCharacterResponseVO{
@@ -82,7 +83,7 @@ object Packet{
             NetQuery<UserCharacterRequestVO,UserCharacterResponseVO>("GetUserCharacterApi",userId).apply {
                 request = UserCharacterRequestVO(userId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserCharge(userId: ULong):UserChargeResponseVO{
@@ -90,7 +91,7 @@ object Packet{
             NetQuery<UserChargeRequestVO,UserChargeResponseVO>("GetUserChargeApi",userId).apply {
                 request = UserChargeRequestVO(userId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserCourse(userId: ULong):UserCourseResponseVO{
@@ -98,7 +99,7 @@ object Packet{
             NetQuery<UserCourseRequestVO,UserCourseResponseVO>("GetUserCourseApi",userId).apply {
                 request = UserCourseRequestVO(userId, 0)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserData(userId: ULong):UserDetailResponseVO{
@@ -106,7 +107,7 @@ object Packet{
             NetQuery<UserDetailRequestVO,UserDetailResponseVO>("GetUserDataApi",userId).apply {
                 request = UserDetailRequestVO(userId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserExtend(userId: ULong):UserExtendResponseVO{
@@ -114,7 +115,7 @@ object Packet{
             NetQuery<UserExtendRequestVO,UserExtendResponseVO>("GetUserExtendApi",userId).apply {
                 request = UserExtendRequestVO(userId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserFavorite(userId: ULong, kind:Int):UserFavoriteResponseVO{
@@ -122,7 +123,7 @@ object Packet{
             NetQuery<UserFavoriteRequestVO,UserFavoriteResponseVO>("GetUserFavoriteApi",userId).apply {
                 request = UserFavoriteRequestVO(userId, kind)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserFriendSeasonRanking(userId: ULong):UserFriendSeasonRankingResponseVO{
@@ -130,7 +131,7 @@ object Packet{
             NetQuery<UserFriendSeasonRankingRequestVO,UserFriendSeasonRankingResponseVO>("GetUserFriendSeasonRankingApi",userId).apply {
                 request = UserFriendSeasonRankingRequestVO(userId,0)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserGhost(userId: ULong):UserGhostResponseVO{
@@ -138,7 +139,7 @@ object Packet{
             NetQuery<UserGhostRequestVO,UserGhostResponseVO>("GetUserGhostApi",userId).apply {
                 request = UserGhostRequestVO(userId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserItem(userId: ULong, itemId:Long):UserItemResponseVO{
@@ -146,7 +147,7 @@ object Packet{
             NetQuery<UserItemRequestVO,UserItemResponseVO>("GetUserItemApi",userId).apply {
                 request = UserItemRequestVO(userId, itemId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserLoginBonus(userId: ULong):UserLoginBonusResponseVO{
@@ -154,7 +155,7 @@ object Packet{
             NetQuery<UserLoginBonusRequestVO,UserLoginBonusResponseVO>("GetUserLoginBonusApi",userId).apply {
                 request = UserLoginBonusRequestVO(userId, 0)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserMap(userId: ULong):UserMapResponseVO{
@@ -162,7 +163,7 @@ object Packet{
             NetQuery<UserMapRequestVO,UserMapResponseVO>("GetUserMapApi",userId).apply {
                 request = UserMapRequestVO(userId,0)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserMusic(userId: ULong):UserMusicResponseVO{
@@ -170,7 +171,7 @@ object Packet{
             NetQuery<UserMusicRequestVO,UserMusicResponseVO>("GetUserMusicApi",userId).apply {
                 request = UserMusicRequestVO(userId,0)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserOption(userId: ULong):UserOptionResponseVO{
@@ -178,7 +179,7 @@ object Packet{
             NetQuery<UserOptionRequestVO,UserOptionResponseVO>("GetUserOptionApi",userId).apply {
                 request = UserOptionRequestVO(userId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserPortrait(userId: ULong):GetUserPortraitResponseVO{
@@ -186,7 +187,7 @@ object Packet{
             NetQuery<GetUserPortraitRequestVO,GetUserPortraitResponseVO>("GetUserPortraitApi",userId).apply {
                 request = GetUserPortraitRequestVO(userId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserPreview(userId: ULong):UserPreviewResponseVO{
@@ -194,7 +195,7 @@ object Packet{
             NetQuery<UserPreviewRequestVO,UserPreviewResponseVO>("GetUserPreviewApi",userId).apply {
                 request = UserPreviewRequestVO(userId, "")
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserRating(userId: ULong):UserRatingResponseVO{
@@ -202,7 +203,7 @@ object Packet{
             NetQuery<UserRatingRequestVO,UserRatingResponseVO>("GetUserRatingApi",userId).apply {
                 request = UserRatingRequestVO(userId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserRecommendRateMusic(userId: ULong):UserRecommendRateMusicResponseVO{
@@ -210,7 +211,7 @@ object Packet{
             NetQuery<UserRecommendRateMusicRequestVO,UserRecommendRateMusicResponseVO>("GetUserRecommendRateMusicApi",userId).apply {
                 request = UserRecommendRateMusicRequestVO(userId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserRecommendSelectionMusic(userId: ULong):UserRecommendSelectionMusicResponseVO{
@@ -218,7 +219,7 @@ object Packet{
             NetQuery<UserRecommendSelectionMusicRequestVO,UserRecommendSelectionMusicResponseVO>("GetUserRecommendSelectionMusicApi",userId).apply {
                 request = UserRecommendSelectionMusicRequestVO(userId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserRegion(userId: ULong):UserRegionResponseVO{
@@ -226,7 +227,7 @@ object Packet{
             NetQuery<UserRegionRequestVO,UserRegionResponseVO>("GetUserRegionApi",userId).apply {
                 request = UserRegionRequestVO(userId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun getUserScoreRanking(userId: ULong):UserScoreRankingResponseVO{
@@ -234,7 +235,7 @@ object Packet{
             NetQuery<UserScoreRankingRequestVO,UserScoreRankingResponseVO>("GetUserScoreRankingApi",userId).apply {
                 request = UserScoreRankingRequestVO(userId, 0)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun ping():PingResponseVO{
@@ -242,7 +243,7 @@ object Packet{
             NetQuery<PingRequestVO,PingResponseVO>("GetUserScoreRankingApi", 0uL).apply {
                 request = PingRequestVO()
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun uploadUserChargelog(userId: ULong, src:UserCharge, srcLog:UserChargelog):UpsertResponseVO{
@@ -250,7 +251,7 @@ object Packet{
             NetQuery<UserChargelogRequestVO,UpsertResponseVO>("UploadUserChargelogApi", 0uL).apply {
                 request = UserChargelogRequestVO(userId, srcLog, src)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun uploadUserPhoto(index:Int, userId:ULong, trackNo:Int, source:ByteArray,):UpsertResponseVO{
@@ -259,7 +260,7 @@ object Packet{
             NetQuery<UserPhotoRequestVO,UpsertResponseVO>("UploadUserPhotoApi", 0uL).apply {
                 TODO()
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun uploadUserPlaylog(userId: ULong, srcLog:UserPlaylog):UpsertResponseVO{
@@ -267,7 +268,7 @@ object Packet{
             NetQuery<UserPlaylogRequestVO,UpsertResponseVO>("UploadUserPlaylogApi", 0uL).apply {
                 request = UserPlaylogRequestVO(userId, srcLog)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun uploadUserPortrait(src:UserPortrait):UpsertResponseVO{
@@ -276,7 +277,7 @@ object Packet{
             NetQuery<UploadUserPortraitRequestVO,UpsertResponseVO>("UploadUserPortraitApi", 0uL).apply {
                 TODO()
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun upsertClientBookkeeping(src:ClientBookkeeping):UpsertResponseVO{
@@ -285,7 +286,7 @@ object Packet{
             NetQuery<ClientBookkeepingRequestVO,UpsertResponseVO>("UpsertClientBookkeepingApi", 0uL).apply {
                 request = ClientBookkeepingRequestVO(src)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun upsertClientSetting():UpsertResponseVO{
@@ -294,7 +295,7 @@ object Packet{
             NetQuery<ClientSettingRequestVO,UpsertResponseVO>("UpsertClientSettingApi", 0uL).apply {
                 TODO("request = ClientSettingRequestVO()")
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun upsertClientTestmode():UpsertResponseVO{
@@ -303,7 +304,7 @@ object Packet{
             NetQuery<ClientTestmodeRequestVO,UpsertResponseVO>("UpsertClientTestmodeApi", 0uL).apply {
                 TODO()
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun upsertClientUpload(errorLog:String, source: ByteArray): UpsertResponseVO {
@@ -312,7 +313,7 @@ object Packet{
             NetQuery<ClientUploadRequestVO,UpsertResponseVO>("UpsertClientUploadApi", 0uL).apply {
                 TODO()
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun upsertUserAll(index:Int, userId:ULong, src:UserAll, loginVO:UserLoginResponseVO):UpsertResponseVO{
@@ -320,7 +321,7 @@ object Packet{
             NetQuery<UserAllRequestVO,UpsertResponseVO>("UpsertUserAllApi", userId).apply {
                 request = UserAllRequestVO(userId, loginVO.loginId?:0uL, ConfigManager.isEventMode, ConfigManager.isFreePlay, src)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun userLogin(userId: ULong, accessCode:String, isContinue:Boolean, genericFlag:Int):UserLoginResponseVO{
@@ -337,7 +338,7 @@ object Packet{
                     dateTime = DateTime.getTimeStamp().toString()
                 )
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 
     fun userLogout(userId: ULong):UserLogoutResponseVO{
@@ -345,6 +346,6 @@ object Packet{
             NetQuery<UserLogoutRequestVO,UserLogoutResponseVO>("UserLogoutApi", userId).apply {
                 request = UserLogoutRequestVO(userId)
             }
-        ).response?:throw Exception("No response")
+        ).response?:throw e
     }
 }

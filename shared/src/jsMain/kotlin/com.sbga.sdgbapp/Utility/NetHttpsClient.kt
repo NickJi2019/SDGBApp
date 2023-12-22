@@ -6,7 +6,7 @@ actual class NetHttpsClient : NetHttpClient {
     }
 
     actual override fun request(
-        header: Map<String, String>,
+        header: Map<String, String>?,
         body: ByteArray,
         method: String
     ): NetHttpClient {

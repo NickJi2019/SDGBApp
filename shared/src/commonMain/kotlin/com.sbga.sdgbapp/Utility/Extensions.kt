@@ -12,5 +12,7 @@ object Extensions {
     fun ByteArray.encrypt(): ByteArray = CipherAES.encrypt(this)
     fun ByteArray.decrypt(): ByteArray = CipherAES.decrypt(this)
     inline fun <reified T> String.deserialize(): T = JsonUtil.deserialize(this)
+    inline fun <reified T> ByteArray.deserialize(): T = JsonUtil.deserialize(this.decodeToString())
     inline fun <reified T> T.serialize(): String = JsonUtil.serialize(this)
+    fun String.sha256(): String = SHA256.sha256(this)
 }

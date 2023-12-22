@@ -12,9 +12,9 @@ actual class NetHttpsClient : NetHttpClient {
         urlConnection = URL(url).openConnection() as HttpsURLConnection
     }
 
-    actual override fun request(header: Map<String, String>, body: ByteArray, method: String): NetHttpClient {
+    actual override fun request(header: Map<String, String>?, body: ByteArray, method: String): NetHttpClient {
         urlConnection.apply {
-            header.onEach { setRequestProperty(it.key, it.value) }
+            header?.onEach { setRequestProperty(it.key, it.value) }
             sslSocketFactory = SSLContext.getInstance("SSL").apply {
                 init(null, arrayOf<TrustManager>(object : X509TrustManager {
                     override fun checkClientTrusted(p0: Array<out java.security.cert.X509Certificate>?, p1: String?) {}

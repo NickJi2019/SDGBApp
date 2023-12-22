@@ -13,9 +13,10 @@ actual open class NetHttpClient : INetHttpClient {
 
     actual override var headers: Map<String, String> = mapOf()
 
-    actual override fun request(header: Map<String, String>, body: ByteArray, method: String): NetHttpClient {
+    actual override fun request(header: Map<String, String>?, body: ByteArray, method: String): NetHttpClient {
+        log.info(body.decodeToString())
         urlConnection.apply {
-            header.onEach { setRequestProperty(it.key, it.value) }
+            header?.onEach { setRequestProperty(it.key, it.value) }
             requestMethod = method
             doOutput = true
             connect()

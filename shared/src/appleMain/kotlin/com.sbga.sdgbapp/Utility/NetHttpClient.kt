@@ -17,7 +17,7 @@ actual open class NetHttpClient : INetHttpClient {
     actual constructor(url: String) {
         this.url = url.toCFString()
     }
-    actual override fun request(header: Map<String, String>, body: ByteArray, method: String): NetHttpClient {
+    actual override fun request(header: Map<String, String>?, body: ByteArray, method: String): NetHttpClient {
         memScoped {
             println("create request")
             val request = CFHTTPMessageCreateRequest(
@@ -27,7 +27,7 @@ actual open class NetHttpClient : INetHttpClient {
                 kCFHTTPVersion1_1
             ).apply {
                 CFHTTPMessageSetBody(this, body.decodeToString().toCFData())
-                header.forEach { CFHTTPMessageSetHeaderFieldValue(this, it.key.toCFString(), it.value.toCFString()) }
+                header?.forEach { CFHTTPMessageSetHeaderFieldValue(this, it.key.toCFString(), it.value.toCFString()) }
             }
             CFReadStreamCreateForHTTPRequest(null, request).let {
                 if (it != null && CFReadStreamOpen(it)) {

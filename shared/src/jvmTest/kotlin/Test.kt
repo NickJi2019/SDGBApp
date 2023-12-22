@@ -1,4 +1,5 @@
 
+import com.sbga.sdgbapp.Aime.WechatAime
 import com.sbga.sdgbapp.Net.Packet.NetIO
 import com.sbga.sdgbapp.Net.Packet.Packet
 import com.sbga.sdgbapp.Net.VO.Mai2.UserLoginRequestVO
@@ -10,6 +11,7 @@ import com.sbga.sdgbapp.Utility.Extensions.deflate
 import com.sbga.sdgbapp.Utility.Extensions.encrypt
 import com.sbga.sdgbapp.Utility.Extensions.inflate
 import com.sbga.sdgbapp.Utility.Extensions.serialize
+import com.sbga.sdgbapp.Utility.Extensions.sha256
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import io.ktor.util.*
@@ -97,8 +99,19 @@ class Test {
     }
 
     @Test fun login(){
-        Packet.userLogout(10795488u).let {
+        Packet.userLogin(11029237u,"",false,0).let {
             log.info(it.returnCode)
+            log.info(it.serialize())
+        }
+    }
+
+    @Test fun sha256(){
+        println("hello".sha256())
+    }
+
+    @Test fun wechatAime(){
+        WechatAime.getUserId("damn").let {
+            log.info(it.userID)
             log.info(it.serialize())
         }
     }
