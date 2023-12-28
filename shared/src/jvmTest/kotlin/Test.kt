@@ -14,7 +14,6 @@ import com.sbga.sdgbapp.Utility.Extensions.serialize
 import com.sbga.sdgbapp.Utility.Extensions.sha256
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
-import io.ktor.util.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -46,6 +45,14 @@ class Test {
         log.error("error")
 
     }
+    @Test fun date(){
+        println(DateTime.getTokyoDateTime())
+        println(DateTime.getTimeStamp())
+        println(DateTime.getChinaDateTime())
+        println(DateTime.getChinaDate())
+        println(DateTime.getLocalDateTime())
+
+    }
 
     @Test
     fun serialize() {
@@ -59,7 +66,7 @@ class Test {
 
     @Test
     fun md() {
-        println(MD5.md5("hello").encodeBase64())
+        println(MD5.md5("hello"))
     }
 
     @Test
@@ -99,7 +106,7 @@ class Test {
     }
 
     @Test fun login(){
-        Packet.userLogin(11029237u,"",false,0).let {
+        Packet.userLogin(11029236u,"",false,0).let {
             log.info(it.returnCode)
             log.info(it.serialize())
         }
@@ -110,9 +117,11 @@ class Test {
     }
 
     @Test fun wechatAime(){
-        WechatAime.getUserId("damn").let {
+        val qr="SGWCMAID2312281012342F40811DDEF27367BBFF80EC8F514B5995C0A4C21975CA61A3A6964446B3049F"
+        WechatAime.getUserId(qr).let {
             log.info(it.userID)
             log.info(it.serialize())
         }
     }
+
 }

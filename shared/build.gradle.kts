@@ -30,6 +30,11 @@ kotlin {
             baseName = "shared"
             isStatic = true
         }
+        pod("AFNetworking"){
+            source = git("https://github.com/AFNetworking/AFNetworking.git") {
+                branch = "master"
+            }
+        }
     }
 
     js {

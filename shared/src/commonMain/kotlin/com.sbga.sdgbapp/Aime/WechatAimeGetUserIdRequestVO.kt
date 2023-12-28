@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class WechatAimeGetUserIdRequestVO (
-    @SerialName("chipID") var chipID: String,
-    @SerialName("openGameID") var openGameID: String ,
-    @SerialName("key") var key: String,
     @SerialName("qrCode") var qrCode: String,
+    @SerialName("openGameID") var openGameID: String ,
+    @SerialName("chipID") var chipID: String,
+    @SerialName("key") var key: String,
     @SerialName("timestamp") var timestamp: String,
 ): VOSerializer()

@@ -15,7 +15,7 @@ object NetIO {
     @OptIn(ExperimentalStdlibApi::class)
     inline fun <reified T0 : VOSerializer,reified T1 : VOSerializer> sendRequest(data:NetQuery<T0,T1>):NetQuery<T0,T1> {
         val client = NetHttpsClient(ConfigManager.maiApiURL + getEndpoint(data)).apply {
-            headers = mapOf(
+            request(header = mapOf(
                 "Content-Type" to "application/json",
                 "User-Agent" to getUserAgent(data),
                 "charset" to "UTF-8",
@@ -23,8 +23,7 @@ object NetIO {
                 "Content-Encoding" to "deflate",
                 "Expect" to "100-continue",
                 "Accept" to ""
-            )
-            request(body = data.getRequest<T0>().encodeToByteArray().encrypt().deflate(), method = "GET")
+            ),body = data.getRequest<T0>().encodeToByteArray().encrypt().deflate(), method = "GET")
             data.setResponse<T1>(getResponse().inflate().decrypt().decodeToString())
             finalize()
         }

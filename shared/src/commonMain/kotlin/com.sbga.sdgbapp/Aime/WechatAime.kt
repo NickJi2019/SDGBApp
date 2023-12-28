@@ -17,7 +17,7 @@ object WechatAime :IAime {
                     chipID = ConfigManager.keyChipId,
                     openGameID = "MAID",
                     key = "${ConfigManager.keyChipId}$time${ConfigManager.SecureManager.WechatAime.salt}".sha256().uppercase(),
-                    qrCode = if(input.length > 64) input.substring(0, 64) else input,
+                    qrCode = if(input.length > 64) input.substring(input.length-64, input.length) else input,
                     timestamp = time
                 ).serialize().encodeToByteArray(),
                 method = "POST"

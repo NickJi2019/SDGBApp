@@ -30,10 +30,18 @@ actual open class NetHttpClient : INetHttpClient {
                 header?.forEach { CFHTTPMessageSetHeaderFieldValue(this, it.key.toCFString(), it.value.toCFString()) }
             }
             CFReadStreamCreateForHTTPRequest(null, request).let {
+
+                val sslSettings = mapOf(
+                    kCFStreamSSLValidatesCertificateChain to kCFBooleanFalse as CPointer<*>,
+                    kCFStreamSSLLevel to kCFStreamSocketSecurityLevelNegotiatedSSL as CPointer<*>
+                ).toCFDictionary()
+
+                CFReadStreamSetProperty(it, kCFStreamPropertySSLSettings, sslSettings)
+
                 if (it != null && CFReadStreamOpen(it)) {
                     val data = NSMutableData()
                     val buffer = allocArray<UInt8Var>(1024)
-                    var readBytes = 0
+                    var readBytes: Int
                     do {
                         readBytes = CFReadStreamRead(it, buffer, 1024).toInt()
                         if (readBytes > 0) {
@@ -74,6 +82,21 @@ actual open class NetHttpClient : INetHttpClient {
         }
         fun String.toCFData(): CFDataRef {
             return CFStringCreateExternalRepresentation(null, this.toCFString(), kCFStringEncodingUTF8, 0u)?:throw Exception("CFStringCreateExternalRepresentation failed")
+        }
+        fun Map<CFStringRef?, CPointer<*>>.toCFDictionary(): CFDictionaryRef {
+            memScoped{
+                val array1 = allocArray<COpaquePointerVar>(this@toCFDictionary.size)
+                val array2 = allocArray<COpaquePointerVar>(this@toCFDictionary.size)
+                var num = 0
+                for (i in this@toCFDictionary) {
+                    array1[num] = i.key
+                    array2[num] = i.value
+                    num++
+                }
+                return CFDictionaryCreate(null, array1, array2, this@toCFDictionary.size.convert(), null, null) ?: throw Exception(
+                    "CFDictionaryCreate failed"
+                )
+            }
         }
     }
 }
