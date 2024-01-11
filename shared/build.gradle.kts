@@ -31,9 +31,7 @@ kotlin {
             isStatic = true
         }
         pod("AFNetworking"){
-            source = git("https://github.com/AFNetworking/AFNetworking.git") {
-                branch = "master"
-            }
+            version = "4.0.1"
         }
     }
 
@@ -55,6 +53,7 @@ kotlin {
 //            implementation(libs.ktor.core)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.coroutines.core)
             implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.0")
         }
         jvmMain.dependencies {
