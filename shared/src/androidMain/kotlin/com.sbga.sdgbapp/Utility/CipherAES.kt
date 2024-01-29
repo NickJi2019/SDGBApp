@@ -22,16 +22,8 @@ actual object CipherAES {
         )
     }
 
-    actual fun encrypt(data: String): String {
-        return encrypt(data.toByteArray()).decodeToString()
-    }
-
     actual fun encrypt(data: ByteArray): ByteArray {
         return encrypter.doFinal(data)
-    }
-
-    actual fun decrypt(data: String): String {
-        return decrypt(data.toByteArray()).decodeToString()
     }
 
     actual fun decrypt(data: ByteArray): ByteArray {

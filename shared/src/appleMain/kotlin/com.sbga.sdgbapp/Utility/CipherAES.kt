@@ -40,10 +40,9 @@ actual object CipherAES {
                 outputLength.value.convert(),
                 outputLength.ptr
             ).let {
-                if (it == kCCSuccess) {
-                    log.info("crypt success")
-                } else {
+                if (it != kCCSuccess) {
                     log.error("crypt error")
+                    log.error(outputData.getPointer(this).readBytes(outputLength.value.toInt()))
                     throw Exception("crypt error")
                 }
             }
@@ -51,16 +50,8 @@ actual object CipherAES {
         }
     }
 
-    actual fun encrypt(data:String): String {
-        return crypt(data.encodeToByteArray(), kCCEncrypt).decodeToString()
-    }
-
     actual fun encrypt(data:ByteArray): ByteArray {
         return crypt(data, kCCEncrypt)
-    }
-
-    actual fun decrypt(data: String): String {
-        return crypt(data.encodeToByteArray(), kCCDecrypt).decodeToString()
     }
 
     actual fun decrypt(data: ByteArray): ByteArray {

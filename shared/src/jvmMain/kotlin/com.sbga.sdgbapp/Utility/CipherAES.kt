@@ -1,6 +1,7 @@
 package com.sbga.sdgbapp.Utility
 
 import com.sbga.sdgbapp.ConfigManager
+import com.sbga.sdgbapp.Utility.Extensions.logI
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
@@ -15,16 +16,9 @@ actual object CipherAES {
         init(Cipher.DECRYPT_MODE, SecretKeySpec(ConfigManager.SecureManager.AES.key.toByteArray(), "AES"), IvParameterSpec(
             ConfigManager.SecureManager.AES.iv.toByteArray()))
     }
-    actual fun encrypt(data:String): String {
-        return encrypt(data.toByteArray()).decodeToString()
-    }
 
     actual fun encrypt(data:ByteArray): ByteArray {
         return encrypter.doFinal(data)
-    }
-
-    actual fun decrypt(data: String): String {
-        return decrypt(data.toByteArray()).decodeToString()
     }
 
     actual fun decrypt(data: ByteArray): ByteArray {
