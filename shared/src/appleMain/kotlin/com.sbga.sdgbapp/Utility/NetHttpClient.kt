@@ -5,80 +5,76 @@ import platform.CFNetwork.*
 import kotlinx.coroutines.*
 import kotlinx.atomicfu.*
 import platform.CoreFoundation.*
-import platform.darwin.UInt8Var
-import platform.posix.free
-import cocoapods.AFNetworking.*
 import platform.Foundation.*
+import platform.UIKit.UIRectEdgeLeft
+import platform.darwin.NSObject
 
 @OptIn(ExperimentalForeignApi::class)
 actual open class NetHttpClient : INetHttpClient {
+
     private val url:String
-    private var responseData: ByteArray? = null
-    actual override var headers: Map<String, String> = mapOf()
+    private val urlSession: NSURLSession
+
     actual constructor(url: String) {
         this.url = url
+        log.info(7)
+        this.urlSession = NSURLSession.sessionWithConfiguration(
+            NSURLSessionConfiguration.ephemeralSessionConfiguration,
+            delegate = trustAllCredentialDelegate,
+            delegateQueue = null
+        )
+
+    }
+    actual override fun requestAsync(
+        header: Map<String, String>?,
+        body: ByteArray,
+        method: String,
+        completion: (ByteArray?) -> Unit
+    ) {
+        NSMutableURLRequest(NSURL.URLWithString(url)?:throw Exception("null return")).apply {
+            setHTTPMethod(method)
+            if (method == "POST") {
+                setHTTPBody(body.toNSData())
+            }
+            allHTTPHeaderFields = (header ?: mapOf()) as Map<Any?, String>
+        }.let {
+            urlSession.dataTaskWithRequest(it) { responseBody: NSData?, responeseStatus: NSURLResponse?, error: NSError? ->
+                if (error != null) {
+                    // 请求失败，处理错误
+                    log.error("Error: ${error.localizedFailureReason}")
+                    log.error(error.localizedDescription)
+                    log.error(error.localizedRecoveryOptions)
+                    log.error(error.localizedRecoverySuggestion)
+                    throw Exception(error.localizedFailureReason)
+                } else {
+                    // 请求成功，处理响应
+                    log.info("got response")
+                    log.info("responseStatus:",(responeseStatus as NSHTTPURLResponse).statusCode)
+                    log.info(responeseStatus.allHeaderFields)
+                }
+                completion(responseBody?.toByteArray())
+            }.resume()
+        }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private suspend fun requestWithSuspend(header: Map<String, String>?, body: ByteArray, method: String) = coroutineScope {
-        log.info("requestWithSuspend")
-        val manager = AFHTTPSessionManager.manager()
-
-        manager.securityPolicy = AFSecurityPolicy.policyWithPinningMode(AFSSLPinningMode.AFSSLPinningModeNone).apply {
-            allowInvalidCertificates = true
-            validatesDomainName = false
+    actual override fun requestSync(header: Map<String, String>?, body: ByteArray, method: String): ByteArray? {
+        val completed = CompletableDeferred<ByteArray?>()
+        requestAsync(header, body, method) {
+            completed.complete(it)
         }
-        val response = CompletableDeferred<ByteArray?>()
-
-        val request = NSMutableURLRequest.requestWithURL(NSURL.URLWithString(url)?:throw Exception("null return")).apply {
-            setHTTPMethod(method)
-            setHTTPBody(body.toNSData())
-            header?.forEach { setValue(it.value, forHTTPHeaderField = it.key) }
-        }
-
-        log.info("request created")
-        log.info("request start to send")
-        manager.dataTaskWithRequest(
-            request,
-            {log.info("Upload Progress: ${it?.fractionCompleted}")},
-            {log.info("Download Progress: ${it?.fractionCompleted}")},
-            completionHandler = { responseStatus, responseBody, error ->
-                log.info("response received")
-                log.info("responseStatus:",(responseStatus as NSHTTPURLResponse).statusCode)
-                log.info(responseStatus.allHeaderFields)
-                if (error != null) {
-                    // 请求失败，处理错误
-                    log.error("Error: ${error.localizedDescription}")
-                } else {
-                    log.info("got response")
-                    // 请求成功，处理响应
-                    val responseByteArray = (responseBody as? NSData)?.toByteArray()
-                    response.complete(responseByteArray)
-                }
-            }
-        ).resume()
-        log.info("request sent")
-        response.await()
-        log.info("requestWithSuspend end")
-        responseData = response.getCompleted()
+        runBlocking { completed.await() }
+        return completed.getCompleted()
     }
 
-    actual override fun request(header: Map<String, String>?, body: ByteArray, method: String): NetHttpClient {
-        log.info("request")
-        runBlocking {
-            requestWithSuspend(header,body,method)
-        }
-        log.info("request end")
-        return this
-    }
-
-
-
-    actual override fun getResponse(): ByteArray {
-        log.info("getResponse")
-        return responseData?:throw Exception("No response data")
-    }
+    /*
+    * 释放资源 / release resources
+    *
+    * ** 重要提示：除非有意为之，请不要在调用异步请求`requestAsync`后立即调用此方法 **
+    * ** Important: Do not call this method immediately after calling the asynchronous request `requestAsync` unless you mean to do so **
+     */
     actual override fun finalize() {
+        urlSession.invalidateAndCancel()
     }
 
     companion object{
@@ -87,6 +83,22 @@ actual open class NetHttpClient : INetHttpClient {
         }
         fun ByteArray.toNSData(): NSData = memScoped {
             return NSData.dataWithBytes(this@toNSData.toCValues().ptr,this@toNSData.size.convert())
+        }
+        object trustAllCredentialDelegate: NSObject(), NSURLSessionDelegateProtocol {
+            override fun URLSession(
+                session: NSURLSession,
+                didReceiveChallenge: NSURLAuthenticationChallenge,
+                completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Unit) {
+
+                if (didReceiveChallenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust) {
+                    completionHandler(
+                        NSURLSessionAuthChallengeUseCredential,
+                        NSURLCredential.credentialForTrust(didReceiveChallenge.protectionSpace.serverTrust!!)
+                    )
+                } else {
+                    completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, null)
+                }
+            }
         }
     }
 }

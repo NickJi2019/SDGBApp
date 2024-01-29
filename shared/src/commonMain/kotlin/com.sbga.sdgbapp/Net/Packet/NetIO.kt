@@ -3,19 +3,18 @@ package com.sbga.sdgbapp.Net.Packet
 import com.sbga.sdgbapp.ConfigManager
 import com.sbga.sdgbapp.Net.VO.NetQuery
 import com.sbga.sdgbapp.Net.VO.VOSerializer
+import com.sbga.sdgbapp.Utility.*
 import com.sbga.sdgbapp.Utility.Extensions.decrypt
 import com.sbga.sdgbapp.Utility.Extensions.deflate
 import com.sbga.sdgbapp.Utility.Extensions.encrypt
 import com.sbga.sdgbapp.Utility.Extensions.inflate
-import com.sbga.sdgbapp.Utility.MD5
-import com.sbga.sdgbapp.Utility.NetHttpsClient
 
 
 object NetIO {
     @OptIn(ExperimentalStdlibApi::class)
     inline fun <reified T0 : VOSerializer,reified T1 : VOSerializer> sendRequest(data:NetQuery<T0,T1>):NetQuery<T0,T1> {
-        val client = NetHttpsClient(ConfigManager.maiApiURL + getEndpoint(data)).apply {
-            request(header = mapOf(
+        val client = NetHttpClient(ConfigManager.maiApiURL + getEndpoint(data)).apply {
+            val res = requestSync(header = mapOf(
                 "Content-Type" to "application/json",
                 "User-Agent" to getUserAgent(data),
                 "charset" to "UTF-8",
@@ -24,7 +23,7 @@ object NetIO {
                 "Expect" to "100-continue",
                 "Accept" to ""
             ),body = data.getRequest<T0>().encodeToByteArray().encrypt().deflate(), method = "GET")
-            data.setResponse<T1>(getResponse().inflate().decrypt().decodeToString())
+            data.setResponse<T1>((res?.inflate()?:throw Exception("the response is null")).decrypt().decodeToString())
             finalize()
         }
         return data

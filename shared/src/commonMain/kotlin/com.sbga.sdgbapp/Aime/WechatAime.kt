@@ -11,7 +11,7 @@ object WechatAime :IAime {
     override fun getUserId(input: String /*qr code*/): WechatAimeGetUserIdResponseVO{
         NetHttpClient(ConfigManager.wechatAimeURL).run {
             val time = DateTime.getTokyoDateTime()
-            request(
+            val response = requestSync(
                 mapOf("Contention" to "Keep-Alive", "Host" to "ai.sys-all.cn", "User-Agent" to "WC_AIME_LIB"),
                 body =  WechatAimeGetUserIdRequestVO(
                     chipID = ConfigManager.keyChipId,
@@ -22,8 +22,8 @@ object WechatAime :IAime {
                 ).serialize().encodeToByteArray(),
                 method = "POST"
             )
-            println(getResponse().decodeToString())
-            val res = getResponse().deserialize<WechatAimeGetUserIdResponseVO>()
+            println(response?.decodeToString())
+            val res = response?.deserialize<WechatAimeGetUserIdResponseVO>() ?: throw Exception("WechatAimeGetUserIdResponseVO deserialize failed")
             finalize()
             return res
             //-1: 二维码过期，-50:请求不合格

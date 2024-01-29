@@ -1,9 +1,8 @@
 package com.sbga.sdgbapp.Utility
 
 interface INetHttpClient {
-    var headers:Map<String, String>
-    fun request(header: Map<String, String>? = this.headers, body:ByteArray, method:String): NetHttpClient
-    fun getResponse(): ByteArray
+    fun requestAsync(header: Map<String, String>?, body:ByteArray, method:String, completion: (ByteArray?) -> Unit): Unit
+    fun requestSync(header: Map<String, String>?, body:ByteArray, method:String): ByteArray?
     fun finalize()
 }
 

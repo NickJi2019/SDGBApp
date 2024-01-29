@@ -1,19 +1,35 @@
 package com.sbga.sdgbapp.Utility
 
-import java.net.HttpURLConnection
-import java.net.URL
+import kotlinx.coroutines.*
+import java.net.*
+import java.security.SecureRandom
+import javax.net.ssl.*
+
 
 actual open class NetHttpClient : INetHttpClient {
     private var urlConnection:HttpURLConnection
-    var result:ByteArray? = null
 
     actual constructor(url: String) {
-        urlConnection = URL(url).openConnection() as HttpURLConnection
+        log.info("ip: ${InetAddress.getByName(URL(url).host).hostAddress}")
+
+        val url = URL(url)
+
+        if (url.protocol == "https") {
+            urlConnection = url.openConnection() as HttpsURLConnection
+            (urlConnection as HttpsURLConnection).apply {
+                sslSocketFactory = SSLContext.getInstance("SSL").apply { init(
+                    null, arrayOf<TrustManager>(trustAllCertificateManager), SecureRandom()
+                ) }.socketFactory
+                hostnameVerifier = HostnameVerifier { _, _ -> true }
+            }
+        }else if (url.protocol == "http") {
+            urlConnection = url.openConnection() as HttpURLConnection
+        }else{
+            throw Exception("Unsupported protocol")
+        }
     }
 
-    actual override var headers: Map<String, String> = mapOf()
-
-    actual override fun request(header: Map<String, String>?, body: ByteArray, method: String): NetHttpClient {
+    actual override fun requestSync(header: Map<String, String>?, body: ByteArray, method: String): ByteArray? {
         log.info(body.decodeToString())
         urlConnection.apply {
             header?.onEach { setRequestProperty(it.key, it.value) }
@@ -21,20 +37,43 @@ actual open class NetHttpClient : INetHttpClient {
             doOutput = true
             connect()
         }.run {
-            outputStream.write(body)
-            outputStream.flush()
-            outputStream.close()
-            result = inputStream.readBytes()
+            if(requestMethod == "POST"){
+                outputStream.write(body)
+                outputStream.flush()
+                outputStream.close()
+            }
+            val result = inputStream.readBytes()
             inputStream.close()
+            return result
         }
-        return this
     }
 
-    actual override fun getResponse(): ByteArray {
-        return result?:throw Exception("No response")
+    actual override fun requestAsync(
+        header: Map<String, String>?,
+        body: ByteArray,
+        method: String,
+        completion: (ByteArray?) -> Unit
+    ): Unit {
+        GlobalScope.launch {
+            completion(requestSync(header, body, method))
+        }
     }
 
+
+    /*
+    * 释放资源 / release resources
+    *
+    * ** 重要提示：除非有意为之，请不要在调用异步请求`requestAsync`后立即调用此方法 **
+    * ** Important: Do not call this method immediately after calling the asynchronous request `requestAsync` unless you mean to do so **
+    */
     actual override fun finalize() {
         urlConnection.disconnect()
+    }
+
+    companion object{
+        object trustAllCertificateManager: X509TrustManager {
+            override fun checkClientTrusted(p0: Array<out java.security.cert.X509Certificate>?, p1: String?) {}
+            override fun checkServerTrusted(p0: Array<out java.security.cert.X509Certificate>?, p1: String?) {}
+            override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> = arrayOf() }
     }
 }
