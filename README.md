@@ -3,15 +3,10 @@
 [English](./README-en.md)
 
 ### 开发指南
-对于在中国大陆的开发者，请首先编辑/settings.gradle.kts文件，将
-`mavenCentral()`
-`gradlePluginPortal()`
-`google()`<br>
-替换为<br>
-`maven("https://maven.aliyun.com/repository/public/")`
-`maven("https://maven.aliyun.com/repository/gradle-plugin/")`
-`maven("https://maven.aliyun.com/repository/google/")`<br>
-以启用阿里云镜像并加快构建速度。
+对于在中国大陆的开发者，请首先编辑[gradle.properties](./gradle.properties)文件，将
+`inMainlandChina`的值改为`true`以启用阿里云镜像并加快构建速度。
+
+如果在进行gradle构建时`:shared:podSetupBuildAFNetworkingIphonesimulator`出现错误，请尝试删除`/shared/build/`和`/iosApp/Pods`并重新构建。
 
 这是一个针对 安卓、iOS、桌面、服务器和浏览器的 Kotlin 多平台项目。
 
