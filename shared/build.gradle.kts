@@ -30,9 +30,6 @@ kotlin {
             baseName = "shared"
             isStatic = true
         }
-        pod("AFNetworking"){
-            version = "4.0.1"
-        }
     }
 
     js {
@@ -71,6 +68,13 @@ kotlin {
         }
 
         commonTest.dependencies {
+            implementation(libs.napier)
+//            implementation(libs.ktor.core)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.coroutines.core)
+
+            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.0")
             implementation(kotlin("test"))
         }
         jsTest.dependencies {

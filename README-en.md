@@ -6,15 +6,11 @@
 
 ### Development Guide
 
-For developers in mainland China, please first edit the /settings.gradle.kts file and change
-`mavenCentral()`
-`gradlePluginPortal()`
-`google()`<br>
-Replace with <br>
-`maven("https://maven.aliyun.com/repository/public/")`
-`maven("https://maven.aliyun.com/repository/gradle-plugin/")`
-`maven("https://maven.aliyun.com/repository/google/")`<br>
-to enable Alibaba Cloud images and speed up builds.
+For developers in mainland China, please first edit [gradle.properties](./gradle.properties) and change the value of
+`inMainlandChina` to `true`to enable Alibaba Cloud images to accurate builds.
+
+
+If an error occurs in `:shared:podSetupBuildAFNetworkingIphonesimulator` when doing a gradle build, please try to delete `/shared/build/` and build again.
 
 This is a Kotlin multi-platform project targeting Android, iOS, desktop, server and browser.
 
@@ -24,7 +20,7 @@ This is a Kotlin multi-platform project targeting Android, iOS, desktop, server 
   Platform specific folders are also here.
 
 * `/server` is for Ktor server applications.
-
+x
 * `/composeApp` is mainly used to store UI code, code used for sharing between your Compose multi-platform applications.
   It contains several subfolders:
     - `commonMain` for code common to all targets.
