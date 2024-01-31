@@ -4,10 +4,14 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 object JsonUtil {
+    val json = Json {
+        ignoreUnknownKeys = true
+    }
+
     inline fun <reified T> serialize(t: T): String {
-        return Json.encodeToString<T>(t)
+        return json.encodeToString<T>(t)
     }
     inline fun <reified T> deserialize(string: String): T {
-        return Json.decodeFromString(string)
+        return json.decodeFromString(string)
     }
 }

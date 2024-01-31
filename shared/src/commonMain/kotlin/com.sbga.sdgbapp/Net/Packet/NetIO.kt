@@ -13,17 +13,36 @@ import com.sbga.sdgbapp.Utility.Extensions.inflate
 object NetIO {
     @OptIn(ExperimentalStdlibApi::class)
     inline fun <reified T0 : VOSerializer,reified T1 : VOSerializer> sendRequest(data:NetQuery<T0,T1>):NetQuery<T0,T1> {
-        val client = NetHttpClient(ConfigManager.maiApiURL + getEndpoint(data)).apply {
-            val res = requestSync(header = mapOf(
-                "Content-Type" to "application/json",
-                "User-Agent" to getUserAgent(data),
-                "charset" to "UTF-8",
-                "Mai-Encoding" to "1.30",
-                "Content-Encoding" to "deflate",
-                "Expect" to "100-continue",
-                "Accept" to ""
-            ),body = data.getRequest<T0>().encodeToByteArray().encrypt().deflate(), method = "GET")
-            data.setResponse<T1>((res?.inflate()?:throw Exception("the response is null")).decrypt().decodeToString())
+        NetHttpClient(ConfigManager.ServerURL.maiApiURL + getEndpoint(data)).apply {
+            log.info("sending data: `${data.getRequest<T0>()}`")
+            val res = requestSync(
+                header = mapOf(
+                    "Content-Type" to "application/json",
+                    "User-Agent" to getUserAgent(data),
+                    "charset" to "UTF-8",
+                    "Mai-Encoding" to ConfigManager.version,
+                    "Content-Encoding" to "deflate",
+                    "Expect" to "100-continue",
+                    "Accept" to ""
+                ),
+                body = data.getRequest<T0>().encodeToByteArray().encrypt().deflate(),
+                method = "POST"
+            )
+            if (res != null) {
+                try{
+                    res.inflate().decrypt().decodeToString().let {
+                        log.info("response received: `$it`")
+                        data.setResponse<T1>(it)
+                    }
+                }catch (e:Exception){
+                    log.error(e.toString())
+                    e.printStackTrace()
+                    throw e
+                }
+            }else {
+                log.error("the response is null")
+                throw Exception("the response is null")
+            }
             finalize()
         }
         return data
@@ -43,7 +62,7 @@ object NetIO {
         if (query.UserId != 0uL) {
             return "${getEndpoint(query)}#${query.UserId}"
         }
-        return "${getEndpoint(query)}#${ConfigManager.clientId}"
+        return "${getEndpoint(query)}#${ConfigManager.keyChipIdShortValue}"
     }
 
 

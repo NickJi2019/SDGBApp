@@ -5,7 +5,7 @@ import org.junit.Test
 class Test {
     @Test
     fun aes() {
-        println(println(CipherAES.encrypt("hello")))
+        println(println(CipherAES.encrypt("hello".encodeToByteArray())))
     }
 
     @Test

@@ -32,6 +32,10 @@ object Packet{
         ).response?:throw e
     }
 
+    fun getGameWordNgList(){
+
+    }
+
     fun getGameRanking():GameRankingResponseVO{
         return NetIO.sendRequest(
             NetQuery<GameRankingRequestVO,GameRankingResponseVO>("GetGameRankingApi",0uL).apply {
@@ -42,7 +46,7 @@ object Packet{
     fun getGameSetting():GameSettingResponseVO{
         return NetIO.sendRequest(
             NetQuery<GameSettingRequestVO,GameSettingResponseVO>("GetGameSettingApi",0uL).apply {
-                request = GameSettingRequestVO(placeId = ConfigManager.placeId, clientId = ConfigManager.clientId)
+                request = GameSettingRequestVO(placeId = ConfigManager.placeId, clientId = ConfigManager.keyChipIdShortValue)
             }
         ).response?:throw e
     }
@@ -240,7 +244,7 @@ object Packet{
 
     fun ping():PingResponseVO{
         return NetIO.sendRequest(
-            NetQuery<PingRequestVO,PingResponseVO>("GetUserScoreRankingApi", 0uL).apply {
+            NetQuery<PingRequestVO,PingResponseVO>("Ping", 0uL).apply {
                 request = PingRequestVO()
             }
         ).response?:throw e
@@ -334,7 +338,7 @@ object Packet{
                     genericFlag = genericFlag,
                     placeId = ConfigManager.placeId,
                     regionId = ConfigManager.regionId,
-                    clientId = ConfigManager.clientId,
+                    clientId = ConfigManager.keyChipIdShortValue,
                     dateTime = DateTime.getTimeStamp().toString()
                 )
             }

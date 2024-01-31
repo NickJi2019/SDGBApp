@@ -1,15 +1,14 @@
 package com.sbga.sdgbapp.Aime
 
 import com.sbga.sdgbapp.ConfigManager
-import com.sbga.sdgbapp.Utility.DateTime
+import com.sbga.sdgbapp.Utility.*
 import com.sbga.sdgbapp.Utility.Extensions.deserialize
 import com.sbga.sdgbapp.Utility.Extensions.serialize
 import com.sbga.sdgbapp.Utility.Extensions.sha256
-import com.sbga.sdgbapp.Utility.NetHttpClient
 
 object WechatAime :IAime {
     override fun getUserId(input: String /*qr code*/): WechatAimeGetUserIdResponseVO{
-        NetHttpClient(ConfigManager.wechatAimeURL).run {
+        NetHttpClient(ConfigManager.ServerURL.wechatAimeURL).run {
             val time = DateTime.getTokyoDateTime()
             val response = requestSync(
                 mapOf("Contention" to "Keep-Alive", "Host" to "ai.sys-all.cn", "User-Agent" to "WC_AIME_LIB"),
@@ -22,7 +21,7 @@ object WechatAime :IAime {
                 ).serialize().encodeToByteArray(),
                 method = "POST"
             )
-            println(response?.decodeToString())
+            log.info(response?.decodeToString())
             val res = response?.deserialize<WechatAimeGetUserIdResponseVO>() ?: throw Exception("WechatAimeGetUserIdResponseVO deserialize failed")
             finalize()
             return res

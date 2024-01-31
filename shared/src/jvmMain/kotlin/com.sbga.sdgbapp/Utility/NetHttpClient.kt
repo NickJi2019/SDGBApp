@@ -10,41 +10,50 @@ actual open class NetHttpClient : INetHttpClient {
     private var urlConnection:HttpURLConnection
 
     actual constructor(url: String) {
+        val thisUrl = URL(url)
+
+        log.info("sending data to:")
+        log.info("host: $thisUrl")
         log.info("ip: ${InetAddress.getByName(URL(url).host).hostAddress}")
 
-        val url = URL(url)
-
-        if (url.protocol == "https") {
-            urlConnection = url.openConnection() as HttpsURLConnection
+        if (thisUrl.protocol == "https") {
+            urlConnection = thisUrl.openConnection() as HttpsURLConnection
             (urlConnection as HttpsURLConnection).apply {
                 sslSocketFactory = SSLContext.getInstance("SSL").apply { init(
                     null, arrayOf<TrustManager>(trustAllCertificateManager), SecureRandom()
                 ) }.socketFactory
                 hostnameVerifier = HostnameVerifier { _, _ -> true }
             }
-        }else if (url.protocol == "http") {
-            urlConnection = url.openConnection() as HttpURLConnection
+        }else if (thisUrl.protocol == "http") {
+            urlConnection = thisUrl.openConnection() as HttpURLConnection
         }else{
             throw Exception("Unsupported protocol")
         }
     }
 
     actual override fun requestSync(header: Map<String, String>?, body: ByteArray, method: String): ByteArray? {
-        log.info(body.decodeToString())
-        urlConnection.apply {
-            header?.onEach { setRequestProperty(it.key, it.value) }
-            requestMethod = method
-            doOutput = true
-            connect()
-        }.run {
-            if(requestMethod == "POST"){
-                outputStream.write(body)
-                outputStream.flush()
-                outputStream.close()
+        try{
+            urlConnection.apply {
+                header?.onEach { setRequestProperty(it.key, it.value) }
+                doOutput = true
+                requestMethod = method
+                connect()
+            }.run {
+                if (requestMethod == "POST") {
+                    outputStream.write(body)
+                    outputStream.flush()
+                    outputStream.close()
+                }
+
+                log.info("response code: $responseCode")
+
+                val result = inputStream.readBytes()
+                inputStream.close()
+                return result
             }
-            val result = inputStream.readBytes()
-            inputStream.close()
-            return result
+        }catch (e:Exception){
+            log.error(e.toString())
+            throw e
         }
     }
 
